@@ -1,39 +1,47 @@
+import { APIResponse } from "../APIResponse";
+
 export interface User {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
   phone?: string;
-  avatar?: string;
+  avatarUrl?: string;
   dateOfBirth?: string;
   gender?: 'male' | 'female' | 'other';
   address?: Address;
   preferences?: UserPreferences;
-  role: 'user' | 'admin' | 'guide';
+  role: UserRole;
   isVerified: boolean;
   createdAt: string;
   updatedAt: string;
 }
+
+export type UserRole = 'user' | 'admin';
 
 export interface Address {
   street?: string;
   city?: string;
   state?: string;
   country?: string;
-  zipCode?: string;
+  postalCode?: string;
 }
 
 export interface UserPreferences {
-  notifications: {
-    email: boolean;
-    sms: boolean;
-    push: boolean;
-  };
-  privacy: {
-    profileVisible: boolean;
-    showBookingHistory: boolean;
-  };
+  notifications: NotificationPreferences;
+  privacy: PrivacyPreferences;
   interests: string[];
+}
+
+export interface NotificationPreferences {
+  email: boolean;
+  sms: boolean;
+  push: boolean;
+}
+
+export interface PrivacyPreferences {
+  profileVisible: boolean;
+  showBookingHistory: boolean;
 }
 
 export interface LoginCredentials {
@@ -52,8 +60,17 @@ export interface RegisterData {
   agreeToTerms: boolean;
 }
 
-export interface ForgotPasswordData {
+export interface ForgotPasswordDataStep1 {
   email: string;
+}
+
+export interface ForgotPasswordDataStep2 {
+  email: string;
+  otp: string;
+}
+
+export interface ForgotPasswordDataStep3 {
+  new_password: string;
 }
 
 export interface ResetPasswordData {
@@ -62,9 +79,40 @@ export interface ResetPasswordData {
   confirmPassword: string;
 }
 
-export interface AuthState {
-  user: User | null;
+export interface AuthResponse {
   isAuthenticated: boolean;
-  isLoading: boolean;
-  error: string | null;
+  email: string;
+  accessToken: string;
+  user: User;
+  refreshToken: string;
+  expiresIn: number;
+  tokenType: string;
+}
+
+// Session management types
+export interface Session {
+  id: string;
+  deviceName: string;
+  deviceType: 'mobile' | 'desktop' | 'tablet';
+  browser: string;
+  location: string;
+  ipAddress: string;
+  isCurrentSession: boolean;
+  lastActive: string;
+  createdAt: string;
+}
+
+export interface Role {
+  id: string;
+  name: string;
+  description: string;
+  isDefault: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ValidationError {
+  field: string;
+  message: string;
+  code: string;
 }

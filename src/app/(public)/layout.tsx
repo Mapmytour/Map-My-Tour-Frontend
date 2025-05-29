@@ -1,5 +1,5 @@
-import Navbar from '@/components/public/Navbar';
-import Footer from '@/components/public/Footer';
+import Header from "@/components/common/Header";
+import TopHeader from "@/components/common/TopHeader";
 
 export default function PublicLayout({
   children,
@@ -7,12 +7,14 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
+    <div>
+      <div>
+        <TopHeader />
+        <Header />
+      </div>
       <main className="flex-1">
         {children}
       </main>
-      <Footer />
     </div>
   );
 }

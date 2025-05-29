@@ -1,33 +1,55 @@
+import { Metadata } from 'next';
 import LoginForm from '@/components/auth/LoginForm';
-import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Sign In | Map My Tour',
+  description: 'Sign in to your Map My Tour account to access your personalized travel dashboard, manage bookings, and explore amazing destinations.',
+  keywords: [
+    'login',
+    'sign in',
+    'travel account',
+    'map my tour',
+    'travel dashboard',
+    'secure login',
+    'user authentication'
+  ],
+  authors: [{ name: 'Map My Tour' }],
+  creator: 'Map My Tour',
+  publisher: 'Map My Tour',
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    title: 'Sign In to Map My Tour',
+    description: 'Access your personalized travel dashboard and explore amazing destinations with Map My Tour.',
+    type: 'website',
+    siteName: 'Map My Tour',
+    images: [
+      {
+        url: '/images/og-login.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Map My Tour - Sign In',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Sign In to Map My Tour',
+    description: 'Access your personalized travel dashboard and explore amazing destinations.',
+    images: ['/images/twitter-login.jpg'],
+    creator: '@mapmytour',
+  },
+  alternates: {
+    canonical: '/public/auth/login',
+  },
+  other: {
+    'theme-color': '#1CA8CB',
+    'color-scheme': 'light',
+  },
+};
 
 export default function LoginPage() {
-  return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <Link href="/auth/register" className="font-medium text-blue-600 hover:text-blue-500">
-              create a new account
-            </Link>
-          </p>
-        </div>
-        
-        <LoginForm />
-        
-        <div className="text-center">
-          <Link 
-            href="/auth/forgot-password" 
-            className="text-sm text-blue-600 hover:text-blue-500"
-          >
-            Forgot your password?
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
+  return <LoginForm />;
 }
