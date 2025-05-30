@@ -51,6 +51,20 @@ module.exports = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        'theme-primary': 'var(--theme-color)',
+        'title': 'var(--title-color)',
+        'body-text': 'var(--body-color)',
+        'smoke': 'var(--smoke-color)',
+        'smoke-2': 'var(--smoke-color2)',
+        'black': 'var(--black-color)',
+        'black-2': 'var(--black-color2)',
+        'gray': 'var(--gray-color)',
+        'light': 'var(--light-color)',
+        'white': 'var(--white-color)',
+        'yellow': 'var(--yellow-color)',
+        'success': 'var(--success-color)',
+        'error': 'var(--error-color)',
+        'th-border': 'var(--th-border-color)',
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -58,7 +72,10 @@ module.exports = {
         sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
-        sans: ['var(--font-sans)', 'sans-serif'],
+        sans: ['var(--body-font)', 'sans-serif'],
+        title: ['var(--title-font)', 'sans-serif'],
+        body: ['var(--body-font)', 'sans-serif'],
+        style: ['var(--style-font)', 'cursive'],
       },
       keyframes: {
         'accordion-down': {
@@ -77,4 +94,4 @@ module.exports = {
     },
   },
   plugins: [require('tailwindcss-animate')],
-}
+};

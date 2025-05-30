@@ -1,3 +1,4 @@
+import Footer from "@/components/common/Footer";
 import Header from "@/components/common/Header";
 import TopHeader from "@/components/common/TopHeader";
 
@@ -15,6 +16,9 @@ export default function PublicLayout({
       <main className="flex-1">
         {children}
       </main>
+      <div>
+        <Footer />
+      </div>
     </div>
   );
 }

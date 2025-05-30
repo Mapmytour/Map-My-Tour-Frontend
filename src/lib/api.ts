@@ -47,7 +47,18 @@ export const API_ENDPOINTS = {
     // Contact & Support
     LEGAL_CONTACT: '/info/legal-contact',
     SUPPORT: '/info/support',
-  }
+  },
+    QUOTE: {
+    CREATE: '/quote/request',
+    GET_BY_ID: '/quote/:id',
+    GET_USER_QUOTES: '/quote/user',
+    UPDATE: '/quote/:id',
+    DELETE: '/quote/:id',
+    STATUS_OPTIONS: '/quote/status-options',
+    TRAVEL_TYPES: '/quote/travel-types',
+    HOTEL_CATEGORIES: '/quote/hotel-categories',
+    ROOM_TYPES: '/quote/room-types',
+  },
 } as const;
 
 // Request interceptor to add auth token
