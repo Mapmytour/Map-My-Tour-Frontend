@@ -20,8 +20,8 @@ const headerConfig = {
         }
     },
     links: {
-        faq: '/faq',
-        support: '/support',
+        faq: '/info/faq',
+        support: '/info/support',
         auth: {
             login: '/auth/login',
             register: '/auth/register'

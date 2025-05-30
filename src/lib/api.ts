@@ -24,6 +24,30 @@ export const API_ENDPOINTS = {
     UPLOAD_AVATAR: '/user/avatar',
     DELETE_ACCOUNT: '/user/account',
   },
+  INFO: {
+    // FAQ Management
+    FAQ: '/info/faq',
+    FAQ_BY_ID: '/info/faq/:id',
+    FAQ_BY_CATEGORY: '/info/faq/category/:category',
+    
+    // Policy Management
+    PRIVACY_POLICY: '/info/privacy-policy',
+    TERMS_CONDITIONS: '/info/terms-conditions',
+    REFUND_POLICY: '/info/refund-policy',
+    SHIPPING_POLICY: '/info/shipping-policy',
+    PAYMENT_SECURITY: '/info/payment-security',
+    COOKIE_POLICY: '/info/cookie-policy',
+    
+    // Guidelines & Information
+    TRAVEL_GUIDELINES: '/info/travel-guidelines',
+    DISCLAIMER: '/info/disclaimer',
+    CUSTOMER_RIGHTS: '/info/customer-rights',
+    INSURANCE_LIABILITY: '/info/insurance-liability',
+    
+    // Contact & Support
+    LEGAL_CONTACT: '/info/legal-contact',
+    SUPPORT: '/info/support',
+  }
 } as const;
 
 // Request interceptor to add auth token

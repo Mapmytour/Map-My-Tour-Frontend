@@ -1,235 +1,100 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@tailwind utilities;
 
-/* ================== Existing Styles ================== */
-/* Theme Colors */
-
-:root {
-  /* Theme Colors */
-  --theme-color: #1CA8CB;
-  --primary-color: #1CA8CB;
-  --title-color: #113D48;
-  --body-color: #6E7070;
-  --smoke-color: #E9F6F9;
-  --smoke-color2: #F3F4F6;
-  --black-color: #000000;
-  --black-color2: #0D0D0C;
-  --gray-color: #E1E4E5;
-  --white-color: #ffffff;
-  --light-color: #E1E4E5;
-  --yellow-color: #FFB539;
-  --success-color: #28a745;
-  --error-color: #dc3545;
-  --th-border-color: #E9EDF5;
-
-  /* Fonts */
-  --title-font: "Manrope", sans-serif;
-  --body-font: "Inter", sans-serif;
-  --style-font: "Montez", cursive;
-  --icon-font: "Font Awesome 6 Pro";
-
-  /* Layout */
-  --main-container: 1320px;
-  --container-gutters: 24px;
-  --section-space: 120px;
-  --section-space-mobile: 80px;
-  --section-title-space: 60px;
-
-  /* Animation */
-  --ripple-ani-duration: 2s;
-}
-
-
-/* ================== Dark Mode Variables ================== */
-/* Define color variables for light (default) mode, and override for dark mode */
-:root {
-  --color-bg: #ffffff;
-  --color-text: #111827;
-  --color-primary: #3B82F6;
-  --color-secondary: #6366F1;
-}
-@media (prefers-color-scheme: dark) {
+/* ================== Shadcn/UI Base ================== */
+@layer base {
   :root {
-    --color-bg: #1F2937;
-    --color-text: #F9FAFB;
-    --color-primary: #60A5FA;
-    --color-secondary: #A78BFA;
+    /* Shadcn/UI Variables mapped to your theme */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 188 77% 47%; /* Your theme-color #1CA8CB */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 188 77% 47%; /* Your theme-color */
+    --radius: 0.5rem;
+
+    /* Your Existing Theme Colors */
+    --theme-color: #1CA8CB;
+    --primary-color: #1CA8CB;
+    --title-color: #113D48;
+    --body-color: #6E7070;
+    --smoke-color: #E9F6F9;
+    --smoke-color2: #F3F4F6;
+    --black-color: #000000;
+    --black-color2: #0D0D0C;
+    --gray-color: #E1E4E5;
+    --white-color: #ffffff;
+    --light-color: #E1E4E5;
+    --yellow-color: #FFB539;
+    --success-color: #28a745;
+    --error-color: #dc3545;
+    --th-border-color: #E9EDF5;
+
+    /* Fonts */
+    --title-font: "Manrope", sans-serif;
+    --body-font: "Inter", sans-serif;
+    --style-font: "Montez", cursive;
+    --icon-font: "Font Awesome 6 Pro";
+
+    /* Layout */
+    --main-container: 1320px;
+    --container-gutters: 24px;
+    --section-space: 120px;
+    --section-space-mobile: 80px;
+    --section-title-space: 60px;
+
+    /* Animation */
+    --ripple-ani-duration: 2s;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 188 77% 47%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 188 77% 47%;
   }
 }
 
-
-/* ================== Shadows & Elevations ================== */
-/* Additional box-shadow utilities for depth */
-.shadow-elev-sm {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-.shadow-elev-md {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-.shadow-elev-lg {
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-}
-/* Material Design elevation levels (z=1 to 6) */
-.elevation-1 {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-}
-.elevation-2 {
-  box-shadow: 0 2px 4px rgba(0,0,0,0.12), 0 2px 3px rgba(0,0,0,0.24);
-}
-.elevation-3 {
-  box-shadow: 0 4px 6px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.18);
-}
-.elevation-4 {
-  box-shadow: 0 8px 8px rgba(0,0,0,0.12), 0 4px 4px rgba(0,0,0,0.14);
-}
-.elevation-5 {
-  box-shadow: 0 12px 16px rgba(0,0,0,0.12), 0 6px 6px rgba(0,0,0,0.16);
-}
-.elevation-6 {
-  box-shadow: 0 16px 24px rgba(0,0,0,0.12), 0 8px 8px rgba(0,0,0,0.14);
-}
-
-
-/* ================== Transitions & Animations ================== */
-/* Utility classes for transition speed */
-.transition-fast {
-  transition: all 150ms ease-in-out;
-}
-.transition-medium {
-  transition: all 300ms ease-in-out;
-}
-.transition-slow {
-  transition: all 600ms ease-in-out;
-}
-/* Custom fade-in animation */
-@keyframes fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-.animate-fade-in {
-  animation: fade-in 0.5s ease-out;
-}
-/* Respect reduced-motion preference: disable animations/transitions */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-  }
-}
-
-
-/* ================== Custom Button Styles ================== */
-/* Primary button */
-.btn-primary {
-  background-color: var(--color-primary);
-  color: var(--color-bg);
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 0.375rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 200ms;
-}
-.btn-primary:hover {
-  background-color: var(--color-secondary);
-}
-.btn-primary:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.6);
-}
-/* Secondary button */
-.btn-secondary {
-  background-color: var(--color-secondary);
-  color: var(--color-bg);
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 0.375rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 200ms;
-}
-.btn-secondary:hover {
-  background-color: var(--color-primary);
-}
-.btn-secondary:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.6);
-}
-
-
-/* ================== Spacing Helpers ================== */
-/* Additional margin/padding utilities */
-.m-0_5 { margin: 0.125rem; }
-.m-1_5 { margin: 0.375rem; }
-.p-0_5 { padding: 0.125rem; }
-.p-1_5 { padding: 0.375rem; }
-/* Axis-specific spacing */
-.mt-1_5 { margin-top: 0.375rem; }
-.mb-1_5 { margin-bottom: 0.375rem; }
-.pt-1_5 { padding-top: 0.375rem; }
-.pb-1_5 { padding-bottom: 0.375rem; }
-
-
-/* ================== Accessibility Styles ================== */
-/* Remove default outline and add custom focus indicator */
-:focus {
-  outline: none;
-}
-:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
-
-/* ================== Typography Enhancements ================== */
-/* Consistent font sizes and line-heights for headings/paragraphs */
-h1 {
-  font-size: 2.25rem; /* 36px */
-  line-height: 2.5rem; /* 40px */
-  font-weight: 800;
-}
-h2 {
-  font-size: 1.875rem; /* 30px */
-  line-height: 2.25rem; /* 36px */
-  font-weight: 700;
-}
-h3 {
-  font-size: 1.5rem; /* 24px */
-  line-height: 2rem;  /* 32px */
-  font-weight: 600;
-}
-p {
-  font-size: 1rem;    /* 16px */
-  line-height: 1.625; /* 26px */
-}
-li, blockquote, pre, code {
-  font-family: inherit;
-}
-
-
-/* ================== Responsive Container & Breakpoints ================== */
-/* Centered container with Tailwind’s breakpoint widths */
-.container {
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-@media (min-width: 640px) {
-  .container { max-width: 640px; }
-}
-@media (min-width: 768px) {
-  .container { max-width: 768px; }
-}
-@media (min-width: 1024px) {
-  .container { max-width: 1024px; }
-}
-@media (min-width: 1280px) {
-  .container { max-width: 1280px; }
-}
-@media (min-width: 1536px) {
-  .container { max-width: 1536px; }
+/* ================== Enhanced Utilities ================== */
+@layer utilities {
+  .theme-primary { color: var(--theme-color); }
+  .bg-theme-primary { background-color: var(--theme-color); }
+  .border-theme-primary { border-color: var(--theme-color); }
+  
+  .text-title { color: var(--title-color); }
+  .text-body { color: var(--body-color); }
+  .bg-smoke { background-color: var(--smoke-color); }
+  .bg-smoke2 { background-color: var(--smoke-color2); }
+  
+  .font-title { font-family: var(--title-font); }
+  .font-body { font-family: var(--body-font); }
+  .font-style { font-family: var(--style-font); }
 }
