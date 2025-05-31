@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const { radix } = require('tailwindcss-radix');
+
 module.exports = {
   darkMode: 'class',
   content: [
@@ -93,5 +95,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), radix()],
 };
