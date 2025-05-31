@@ -1,42 +1,61 @@
+// tour/index.ts
 export interface Tour {
   id: string;
   title: string;
   slug: string;
   description: string;
   shortDescription: string;
+  
+  // Media
   images: TourImage[];
+  
+  // Pricing
   price: {
-    base: number;
+    amount: number;
     currency: string;
-    discounted?: number;
-    groupDiscount?: number;
+    discountedPrice?: number;
   };
+  
+  // Duration
   duration: {
     days: number;
     nights: number;
   };
+  
+  // Classification
   category: TourCategory;
   destination: Destination;
   difficulty: 'easy' | 'moderate' | 'challenging' | 'extreme';
+  
+  // Group
   groupSize: {
     min: number;
     max: number;
   };
+  
+  // Content
   included: string[];
   excluded: string[];
-  itinerary: ItineraryDay[];
   highlights: string[];
-  requirements: string[];
-  cancellationPolicy: string;
+  itinerary: ItineraryDay[];
+  
+  // Guide
   guide: Guide;
+  
+  // Availability
   availability: TourAvailability[];
+  
+  // Reviews
   rating: {
     average: number;
     count: number;
   };
-  reviews: Review[];
+  
+  // Status
   status: 'active' | 'inactive' | 'draft';
   featured: boolean;
+  
+  // Metadata
   createdAt: string;
   updatedAt: string;
 }
@@ -58,15 +77,12 @@ export interface TourCategory {
 export interface Destination {
   id: string;
   name: string;
-  slug: string;
   country: string;
-  state?: string;
   coordinates: {
     lat: number;
     lng: number;
   };
   image?: string;
-  description?: string;
 }
 
 export interface ItineraryDay {
@@ -82,9 +98,8 @@ export interface Guide {
   id: string;
   name: string;
   avatar?: string;
-  experience: number;
+  experience: number; // years
   languages: string[];
-  specialization: string[];
   rating: number;
   bio: string;
 }
@@ -96,19 +111,7 @@ export interface TourAvailability {
   availableSlots: number;
   bookedSlots: number;
   price?: number;
-}
-
-export interface Review {
-  id: string;
-  userId: string;
-  userName: string;
-  userAvatar?: string;
-  rating: number;
-  title: string;
-  comment: string;
-  images?: string[];
-  date: string;
-  helpful: number;
+  status: 'available' | 'limited' | 'sold-out' | 'cancelled';
 }
 
 export interface TourFilters {
@@ -118,4 +121,8 @@ export interface TourFilters {
   duration: string[];
   difficulty: string[];
   rating: number;
+  dates?: {
+    from: string;
+    to: string;
+  };
 }

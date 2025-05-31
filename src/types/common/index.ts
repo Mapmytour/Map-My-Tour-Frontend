@@ -1,41 +1,18 @@
-export interface ApiResponse<T = any> {
-  success: boolean;
-  data: T;
-  message: string;
-  error?: string;
-}
 
-export interface PaginationParams {
-  page: number;
-  limit: number;
-  total?: number;
-  totalPages?: number;
-}
 
-export interface SearchParams {
-  query?: string;
-  category?: string;
-  location?: string;
-  priceMin?: number;
-  priceMax?: number;
-  duration?: string;
-  difficulty?: string;
-}
+export const CURRENCIES = ['USD', 'EUR', 'GBP', 'CAD', 'AUD', 'JPY', 'SGD'] as const;
+export const LANGUAGES = ['en', 'es', 'fr', 'de', 'it', 'pt', 'ja', 'zh'] as const;
+export const TIMEZONES = [
+  'UTC',
+  'America/New_York',
+  'America/Los_Angeles',
+  'Europe/London',
+  'Europe/Paris',
+  'Asia/Tokyo',
+  'Asia/Singapore',
+  'Australia/Sydney'
+] as const;
 
-export interface FilterOption {
-  label: string;
-  value: string;
-  count?: number;
-}
-
-export interface NavMenuItem {
-  label: string;
-  href: string;
-  icon?: React.ReactNode;
-  children?: NavMenuItem[];
-}
-
-export interface BreadcrumbItem {
-  label: string;
-  href?: string;
-}
+export type Currency = typeof CURRENCIES[number];
+export type Language = typeof LANGUAGES[number];
+export type Timezone = typeof TIMEZONES[number];
