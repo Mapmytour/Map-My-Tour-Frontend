@@ -3,6 +3,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
+/* ================== Swiper ================== */
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+
 /* ================== Shadcn/UI Base ================== */
 @layer base {
   :root {
