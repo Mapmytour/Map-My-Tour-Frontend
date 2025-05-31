@@ -5,10 +5,6 @@ import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import { Swiper as SwiperType } from 'swiper';
-import type { StaticImageData } from 'next/image';
-import Bg1 from '/assets/img/hero/hero_bg_1_1.jpg';
-import Bg2 from '/assets/img/hero/hero_bg_1_2.jpg';
-import Bg3 from '/assets/img/hero/hero_bg_1_3.jpg';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -16,7 +12,7 @@ import 'swiper/css/navigation';
 
 interface Slide {
   id: number;
-  image: string | StaticImageData;
+  image: string;
   title: string;
   subtitle: string;
 }
@@ -27,19 +23,19 @@ export default function HeroSection() {
   const slides: Slide[] = [
     {
       id: 1,
-      image: Bg1,
+      image: '/assets/img/hero/hero_bg_1_1.jpg',
       title: "Let's make your best trip with us",
       subtitle: "Get unforgettable pleasure with us",
     },
     {
       id: 2,
-      image: Bg2,
+      image: '/assets/img/hero/hero_bg_1_2.jpg',
       title: "Discover paradise destinations",
       subtitle: "Explore breathtaking locations",
     },
     {
       id: 3,
-      image: Bg3,
+      image: '/assets/img/hero/hero_bg_1_3.jpg',
       title: "Experience local culture",
       subtitle: "Authentic adventures await",
     }

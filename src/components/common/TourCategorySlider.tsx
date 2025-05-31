@@ -1,17 +1,11 @@
 'use client';
 
 import { useState, useEffect, CSSProperties } from "react";
-import { StaticImageData } from 'next/image';
 
-import Category1 from '/assets/img/category/category_1_4.jpg';
-import Category2 from '/assets/img/category/category_1_5.jpg';
-import Category3 from '/assets/img/category/category_1_1.jpg';
-import Category4 from '/assets/img/category/category_1_2.jpg';
-import Category5 from '/assets/img/category/category_1_3.jpg';
 
 interface Category {
   title: string;
-  image: string | StaticImageData;
+  image: string;
 }
 
 interface Slide extends Category {
@@ -19,11 +13,11 @@ interface Slide extends Category {
 }
 
 const categories: Category[] = [
-  { title: "Wildlife", image: Category1 },
-  { title: "Walking", image: Category2 },
-  { title: "Cruises", image: Category3 },
-  { title: "Hiking", image: Category4 },
-  { title: "Airbirds", image: Category5 },
+  { title: "Wildlife", image: '/assets/img/category/category_1_1.jpg' },
+  { title: "Walking", image: '/assets/img/category/category_1_2.jpg' },
+  { title: "Cruises", image: '/assets/img/category/category_1_3.jpg' },
+  { title: "Hiking", image: '/assets/img/category/category_1_4.jpg' },
+  { title: "Airbirds", image: '/assets/img/category/category_1_5.jpg' },
 ];
 
 const CurvedCategorySlider: React.FC = () => {
@@ -131,7 +125,7 @@ const CurvedCategorySlider: React.FC = () => {
                   >
                     <div className="box-img global-img rounded-3xl overflow-hidden">
                       <img
-                        src={typeof item.image === 'string' ? item.image : item.image.src}
+                        src={item.image}
                         alt={item.title}
                         className="w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 object-cover transition-transform duration-700 ease-in-out hover:scale-110"
                       />
