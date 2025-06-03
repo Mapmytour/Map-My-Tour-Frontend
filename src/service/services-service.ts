@@ -1,4 +1,5 @@
-import { apiClient, API_ENDPOINTS } from '@/lib/api';
+import { apiClient } from '@/lib/api';
+import { API_ENDPOINTS } from '@/lib/api-endpoints';
 import {
   Service,
   ServiceCategory,
@@ -946,7 +947,7 @@ class ServicesService {
    */
   validatePricingModel(model: string, price: number, capacity?: { min: number; max: number }): boolean {
     if (price <= 0) return false;
-    
+
     switch (model) {
       case 'per-person':
         return true;

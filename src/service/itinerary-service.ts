@@ -1,4 +1,5 @@
-import { apiClient, API_ENDPOINTS } from '@/lib/api';
+import { apiClient } from '@/lib/api';
+import { API_ENDPOINTS } from '@/lib/api-endpoints';
 import {
     Itinerary,
     ItineraryDay,
