@@ -1,4 +1,5 @@
-import { apiClient, API_ENDPOINTS } from '@/lib/api';
+import { apiClient } from '@/lib/api';
+import { API_ENDPOINTS } from '@/lib/api-endpoints';
 import {
   FAQItem,
   PrivacyPolicy,
@@ -37,10 +38,10 @@ class InfoService {
    */
   async getAllFAQs(category?: string): Promise<APIResponse<FAQItem[]>> {
     try {
-      const endpoint = category 
+      const endpoint = category
         ? API_ENDPOINTS.INFO.FAQ_BY_CATEGORY.replace(':category', category)
         : API_ENDPOINTS.INFO.FAQ;
-      
+
       const response = await apiClient.get<FAQItem[]>(endpoint);
       return response;
     } catch (error) {

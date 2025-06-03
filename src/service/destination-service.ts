@@ -1,4 +1,5 @@
-import { apiClient, API_ENDPOINTS } from '@/lib/api';
+import { apiClient } from '@/lib/api';
+import { API_ENDPOINTS } from '@/lib/api-endpoints';
 import {
   Destination,
   DestinationImage,
@@ -649,7 +650,7 @@ class DestinationService {
     const R = 6371; // Earth's radius in kilometers
     const dLat = this.toRadians(lat2 - lat1);
     const dLng = this.toRadians(lng2 - lng1);
-    const a = 
+    const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos(this.toRadians(lat1)) * Math.cos(this.toRadians(lat2)) *
       Math.sin(dLng / 2) * Math.sin(dLng / 2);
