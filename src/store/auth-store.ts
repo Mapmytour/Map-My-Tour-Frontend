@@ -10,7 +10,7 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
-  
+
   // Actions
   setAuth: (authData: AuthResponse) => void;
   setUser: (user: User) => void;
@@ -38,14 +38,18 @@ export const useAuthStore = create<AuthState>()(
           user: authData.user,
           accessToken: authData.accessToken,
           refreshToken: authData.refreshToken,
-          isAuthenticated: authData.isAuthenticated,
+          isAuthenticated: !!(authData.accessToken && authData.user), // Compute based on actual data
           error: null,
           isLoading: false,
         });
       },
 
       setUser: (user: User) => {
-        set({ user, isAuthenticated: true });
+        const currentState = get();
+        set({
+          user,
+          isAuthenticated: !!(currentState.accessToken && user) // Update isAuthenticated when user is set
+        });
       },
 
       setLoading: (loading: boolean) => {
@@ -68,14 +72,22 @@ export const useAuthStore = create<AuthState>()(
       },
 
       updateTokens: (accessToken: string, refreshToken: string) => {
-        set({ accessToken, refreshToken });
+        const currentState = get();
+        set({
+          accessToken,
+          refreshToken,
+          isAuthenticated: !!(accessToken && currentState.user) // Update isAuthenticated when tokens change
+        });
       },
 
       updateUser: (userData: Partial<User>) => {
         const currentUser = get().user;
+        const currentState = get();
         if (currentUser) {
+          const updatedUser = { ...currentUser, ...userData };
           set({
-            user: { ...currentUser, ...userData },
+            user: updatedUser,
+            isAuthenticated: !!(currentState.accessToken && updatedUser)
           });
         }
       },
@@ -84,7 +96,7 @@ export const useAuthStore = create<AuthState>()(
       name: 'auth-storage',
       storage: createJSONStorage(() => ({
         getItem: (name: string) => {
-          // Use sessionStorage fallback since localStorage is not available
+          // Use sessionStorage since localStorage is not available in artifacts
           if (typeof window !== 'undefined') {
             return window.sessionStorage.getItem(name);
           }
@@ -107,6 +119,12 @@ export const useAuthStore = create<AuthState>()(
         refreshToken: state.refreshToken,
         isAuthenticated: state.isAuthenticated,
       }),
+      // Rehydrate isAuthenticated based on actual data
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.isAuthenticated = !!(state.accessToken && state.user);
+        }
+      },
     }
   )
 );

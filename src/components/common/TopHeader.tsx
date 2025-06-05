@@ -154,7 +154,7 @@ export default function TopHeader() {
 
                     {/* Dropdown Menu */}
                     {showDropdown && (
-                        <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                        <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2">
                             {/* User Info in Dropdown - Mobile */}
                             <div className="md:hidden px-4 py-2 border-b border-gray-100">
                                 <div className="font-medium text-gray-900">

@@ -45,10 +45,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Initialize auth state when the app loads
   useEffect(() => {
-    if (auth.accessToken && !auth.user) {
+    // Only try to get current user if we have a token but no user data
+    if (auth.accessToken && !auth.user && !auth.isLoading) {
       auth.getCurrentUser();
     }
-  }, []);
+  }, [auth.accessToken, auth.user, auth.isLoading]); // Added proper dependencies
 
   return (
     <AuthContext.Provider value={auth}>

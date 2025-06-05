@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth-store';
 import { authService, UpdateProfileRequest, ChangePasswordRequest } from '@/service/auth-service';
@@ -21,7 +21,7 @@ export const useAuth = () => {
     user,
     accessToken,
     refreshToken,
-    isAuthenticated,
+    isAuthenticated: storeIsAuthenticated,
     isLoading,
     error,
     setAuth,
@@ -32,12 +32,17 @@ export const useAuth = () => {
     updateUser,
   } = useAuthStore();
 
+  // Compute isAuthenticated based on actual state
+  const isAuthenticated = useMemo(() => {
+    return !!(accessToken && user);
+  }, [accessToken, user]);
+
   // Initialize auth state on mount
   useEffect(() => {
-    if (accessToken && !user) {
+    if (accessToken && !user && !isLoading) {
       getCurrentUser();
     }
-  }, [accessToken, user]);
+  }, [accessToken, user, isLoading]);
 
   /**
    * Login user
@@ -48,7 +53,7 @@ export const useAuth = () => {
       setError(null);
 
       const response = await authService.login(credentials);
-      
+
       if (response.success) {
         setAuth(response.data);
         return { success: true, data: response.data };
@@ -74,7 +79,7 @@ export const useAuth = () => {
       setError(null);
 
       const response = await authService.register(userData);
-      
+
       if (response.success) {
         return { success: true, data: response.data };
       } else {
@@ -96,7 +101,7 @@ export const useAuth = () => {
   const logout = useCallback(async () => {
     try {
       setLoading(true);
-      
+
       // Call logout API to invalidate server-side session
       await authService.logout();
     } catch (error) {
@@ -118,7 +123,7 @@ export const useAuth = () => {
       setError(null);
 
       const response = await authService.forgotPasswordStep1(data);
-      
+
       if (response.success) {
         return { success: true, message: response.message };
       } else {
@@ -143,7 +148,7 @@ export const useAuth = () => {
       setError(null);
 
       const response = await authService.forgotPasswordStep2(data);
-      
+
       if (response.success) {
         return { success: true, data: response.data };
       } else {
@@ -168,7 +173,7 @@ export const useAuth = () => {
       setError(null);
 
       const response = await authService.forgotPasswordStep3(data);
-      
+
       if (response.success) {
         return { success: true, message: response.message };
       } else {
@@ -193,7 +198,7 @@ export const useAuth = () => {
       setError(null);
 
       const response = await authService.resetPassword(data);
-      
+
       if (response.success) {
         return { success: true, message: response.message };
       } else {
@@ -218,7 +223,7 @@ export const useAuth = () => {
       setError(null);
 
       const response = await authService.getCurrentUser();
-      
+
       if (response.success) {
         setUser(response.data);
         return { success: true, data: response.data };
@@ -248,7 +253,7 @@ export const useAuth = () => {
       setError(null);
 
       const response = await authService.updateProfile(data);
-      
+
       if (response.success) {
         updateUser(response.data);
         return { success: true, data: response.data };
@@ -274,7 +279,7 @@ export const useAuth = () => {
       setError(null);
 
       const response = await authService.changePassword(data);
-      
+
       if (response.success) {
         return { success: true, message: response.message };
       } else {
@@ -299,7 +304,7 @@ export const useAuth = () => {
       setError(null);
 
       const response = await authService.uploadAvatar(file);
-      
+
       if (response.success) {
         updateUser(response.data.user);
         return { success: true, data: response.data };
@@ -325,7 +330,7 @@ export const useAuth = () => {
       setError(null);
 
       const response = await authService.verifyEmail({ email, otp });
-      
+
       if (response.success) {
         // Refresh user data to get updated verification status
         await getCurrentUser();
@@ -352,7 +357,7 @@ export const useAuth = () => {
       setError(null);
 
       const response = await authService.resendVerificationEmail(email);
-      
+
       if (response.success) {
         return { success: true, message: response.message };
       } else {
@@ -377,7 +382,7 @@ export const useAuth = () => {
       setError(null);
 
       const response = await authService.deleteAccount(password);
-      
+
       if (response.success) {
         clearAuth();
         router.push('/');
@@ -412,8 +417,8 @@ export const useAuth = () => {
    * Check if user is authenticated
    */
   const checkAuth = useCallback(() => {
-    return !!(accessToken && user && isAuthenticated);
-  }, [accessToken, user, isAuthenticated]);
+    return !!(accessToken && user);
+  }, [accessToken, user]);
 
   /**
    * Clear error
@@ -423,11 +428,11 @@ export const useAuth = () => {
   }, [setError]);
 
   return {
-    // State
+    // State - These are the core properties you wanted working
     user,
     accessToken,
     refreshToken,
-    isAuthenticated: checkAuth(),
+    isAuthenticated, // This now properly computes based on accessToken && user
     isLoading,
     error,
 
