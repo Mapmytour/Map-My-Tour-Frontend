@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import API_ENDPOINTS from './api-endpoints';
 
 // API Configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://13.233.153.229:8080/api';
 const API_VERSION = 'v1';
 
 // Request interceptor to add auth token

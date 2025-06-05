@@ -1,5 +1,5 @@
-import { apiClient } from '@/lib/api';
-import { API_ENDPOINTS } from '@/lib/api-endpoints';
+// src/service/info-service.ts
+
 import {
   FAQItem,
   PrivacyPolicy,
@@ -16,21 +16,32 @@ import {
   CookiePolicy,
 } from '@/types/info';
 import { APIResponse } from '@/types/APIResponse';
+import {
+  infoData,
+  getFAQCategories,
+  getFAQsByCategory,
+  searchFAQs as searchFAQsHelper
+} from '@/data/infoData';
 
-// Additional request types for info service
-export interface FAQRequest {
-  question: string;
-  answer: string;
-  category?: string;
-}
+// Simulate API delay for realistic behavior
+const simulateDelay = (ms: number = 500): Promise<void> => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};
 
-export interface FAQUpdateRequest extends Partial<FAQRequest> {
-  id: string;
-}
+// Helper to create API response format
+const createAPIResponse = <T>(data: T, message: string = 'Success'): APIResponse<T> => {
+  return {
+    success: true,
+    statusCode: 200,
+    message,
+    data,
+    errors: []
+  };
+};
 
 class InfoService {
   // ========================
-  // FAQ Management
+  // FAQ Management (Read Only)
   // ========================
 
   /**
@@ -38,12 +49,15 @@ class InfoService {
    */
   async getAllFAQs(category?: string): Promise<APIResponse<FAQItem[]>> {
     try {
-      const endpoint = category
-        ? API_ENDPOINTS.INFO.FAQ_BY_CATEGORY.replace(':category', category)
-        : API_ENDPOINTS.INFO.FAQ;
+      await simulateDelay();
 
-      const response = await apiClient.get<FAQItem[]>(endpoint);
-      return response;
+      let faqs = infoData.faqs;
+
+      if (category) {
+        faqs = getFAQsByCategory(category);
+      }
+
+      return createAPIResponse(faqs, 'FAQs retrieved successfully');
     } catch (error) {
       throw new Error(`Failed to fetch FAQs: ${error}`);
     }
@@ -54,53 +68,17 @@ class InfoService {
    */
   async getFAQById(id: string): Promise<APIResponse<FAQItem>> {
     try {
-      const endpoint = API_ENDPOINTS.INFO.FAQ_BY_ID.replace(':id', id);
-      const response = await apiClient.get<FAQItem>(endpoint);
-      return response;
+      await simulateDelay();
+
+      const faq = infoData.faqs.find(f => f.id === id);
+
+      if (!faq) {
+        throw new Error('FAQ not found');
+      }
+
+      return createAPIResponse(faq, 'FAQ retrieved successfully');
     } catch (error) {
       throw new Error(`Failed to fetch FAQ: ${error}`);
-    }
-  }
-
-  /**
-   * Create new FAQ
-   */
-  async createFAQ(data: FAQRequest): Promise<APIResponse<FAQItem>> {
-    try {
-      const response = await apiClient.post<FAQItem>(
-        API_ENDPOINTS.INFO.FAQ,
-        data
-      );
-      return response;
-    } catch (error) {
-      throw new Error(`Failed to create FAQ: ${error}`);
-    }
-  }
-
-  /**
-   * Update FAQ
-   */
-  async updateFAQ(data: FAQUpdateRequest): Promise<APIResponse<FAQItem>> {
-    try {
-      const endpoint = API_ENDPOINTS.INFO.FAQ_BY_ID.replace(':id', data.id);
-      const { id, ...updateData } = data;
-      const response = await apiClient.put<FAQItem>(endpoint, updateData);
-      return response;
-    } catch (error) {
-      throw new Error(`Failed to update FAQ: ${error}`);
-    }
-  }
-
-  /**
-   * Delete FAQ
-   */
-  async deleteFAQ(id: string): Promise<APIResponse<{ message: string }>> {
-    try {
-      const endpoint = API_ENDPOINTS.INFO.FAQ_BY_ID.replace(':id', id);
-      const response = await apiClient.delete<{ message: string }>(endpoint);
-      return response;
-    } catch (error) {
-      throw new Error(`Failed to delete FAQ: ${error}`);
     }
   }
 
@@ -109,20 +87,33 @@ class InfoService {
    */
   async searchFAQs(query: string, category?: string): Promise<APIResponse<FAQItem[]>> {
     try {
-      const params: Record<string, string> = { q: query };
-      if (category) {
-        params.category = category;
-      }
+      await simulateDelay();
 
-      const response = await apiClient.get<FAQItem[]>(API_ENDPOINTS.INFO.FAQ, params);
-      return response;
+      const results = searchFAQsHelper(query, category);
+
+      return createAPIResponse(results, 'FAQ search completed successfully');
     } catch (error) {
       throw new Error(`Failed to search FAQs: ${error}`);
     }
   }
 
+  /**
+   * Get FAQ categories
+   */
+  async getFAQCategories(): Promise<APIResponse<string[]>> {
+    try {
+      await simulateDelay();
+
+      const categories = getFAQCategories();
+
+      return createAPIResponse(categories, 'FAQ categories retrieved successfully');
+    } catch (error) {
+      throw new Error(`Failed to fetch FAQ categories: ${error}`);
+    }
+  }
+
   // ========================
-  // Privacy Policy
+  // Privacy Policy (Read Only)
   // ========================
 
   /**
@@ -130,30 +121,16 @@ class InfoService {
    */
   async getPrivacyPolicy(): Promise<APIResponse<PrivacyPolicy>> {
     try {
-      const response = await apiClient.get<PrivacyPolicy>(API_ENDPOINTS.INFO.PRIVACY_POLICY);
-      return response;
+      await simulateDelay();
+
+      return createAPIResponse(infoData.privacyPolicy, 'Privacy policy retrieved successfully');
     } catch (error) {
       throw new Error(`Failed to fetch privacy policy: ${error}`);
     }
   }
 
-  /**
-   * Update Privacy Policy
-   */
-  async updatePrivacyPolicy(data: Partial<PrivacyPolicy>): Promise<APIResponse<PrivacyPolicy>> {
-    try {
-      const response = await apiClient.put<PrivacyPolicy>(
-        API_ENDPOINTS.INFO.PRIVACY_POLICY,
-        data
-      );
-      return response;
-    } catch (error) {
-      throw new Error(`Failed to update privacy policy: ${error}`);
-    }
-  }
-
   // ========================
-  // Terms and Conditions
+  // Terms and Conditions (Read Only)
   // ========================
 
   /**
@@ -161,30 +138,16 @@ class InfoService {
    */
   async getTermsAndConditions(): Promise<APIResponse<TermsAndConditions>> {
     try {
-      const response = await apiClient.get<TermsAndConditions>(API_ENDPOINTS.INFO.TERMS_CONDITIONS);
-      return response;
+      await simulateDelay();
+
+      return createAPIResponse(infoData.termsAndConditions, 'Terms and conditions retrieved successfully');
     } catch (error) {
       throw new Error(`Failed to fetch terms and conditions: ${error}`);
     }
   }
 
-  /**
-   * Update Terms and Conditions
-   */
-  async updateTermsAndConditions(data: Partial<TermsAndConditions>): Promise<APIResponse<TermsAndConditions>> {
-    try {
-      const response = await apiClient.put<TermsAndConditions>(
-        API_ENDPOINTS.INFO.TERMS_CONDITIONS,
-        data
-      );
-      return response;
-    } catch (error) {
-      throw new Error(`Failed to update terms and conditions: ${error}`);
-    }
-  }
-
   // ========================
-  // Refund and Cancellation Policy
+  // Refund and Cancellation Policy (Read Only)
   // ========================
 
   /**
@@ -192,30 +155,16 @@ class InfoService {
    */
   async getRefundPolicy(): Promise<APIResponse<RefundCancellationPolicy>> {
     try {
-      const response = await apiClient.get<RefundCancellationPolicy>(API_ENDPOINTS.INFO.REFUND_POLICY);
-      return response;
+      await simulateDelay();
+
+      return createAPIResponse(infoData.refundPolicy, 'Refund policy retrieved successfully');
     } catch (error) {
       throw new Error(`Failed to fetch refund policy: ${error}`);
     }
   }
 
-  /**
-   * Update Refund Policy
-   */
-  async updateRefundPolicy(data: Partial<RefundCancellationPolicy>): Promise<APIResponse<RefundCancellationPolicy>> {
-    try {
-      const response = await apiClient.put<RefundCancellationPolicy>(
-        API_ENDPOINTS.INFO.REFUND_POLICY,
-        data
-      );
-      return response;
-    } catch (error) {
-      throw new Error(`Failed to update refund policy: ${error}`);
-    }
-  }
-
   // ========================
-  // Shipping and Delivery Policy
+  // Shipping and Delivery Policy (Read Only)
   // ========================
 
   /**
@@ -223,30 +172,16 @@ class InfoService {
    */
   async getShippingPolicy(): Promise<APIResponse<ShippingDeliveryPolicy>> {
     try {
-      const response = await apiClient.get<ShippingDeliveryPolicy>(API_ENDPOINTS.INFO.SHIPPING_POLICY);
-      return response;
+      await simulateDelay();
+
+      return createAPIResponse(infoData.shippingPolicy, 'Shipping policy retrieved successfully');
     } catch (error) {
       throw new Error(`Failed to fetch shipping policy: ${error}`);
     }
   }
 
-  /**
-   * Update Shipping Policy
-   */
-  async updateShippingPolicy(data: Partial<ShippingDeliveryPolicy>): Promise<APIResponse<ShippingDeliveryPolicy>> {
-    try {
-      const response = await apiClient.put<ShippingDeliveryPolicy>(
-        API_ENDPOINTS.INFO.SHIPPING_POLICY,
-        data
-      );
-      return response;
-    } catch (error) {
-      throw new Error(`Failed to update shipping policy: ${error}`);
-    }
-  }
-
   // ========================
-  // Payment Security Policy
+  // Payment Security Policy (Read Only)
   // ========================
 
   /**
@@ -254,30 +189,16 @@ class InfoService {
    */
   async getPaymentSecurityPolicy(): Promise<APIResponse<PaymentSecurityPolicy>> {
     try {
-      const response = await apiClient.get<PaymentSecurityPolicy>(API_ENDPOINTS.INFO.PAYMENT_SECURITY);
-      return response;
+      await simulateDelay();
+
+      return createAPIResponse(infoData.paymentSecurity, 'Payment security policy retrieved successfully');
     } catch (error) {
       throw new Error(`Failed to fetch payment security policy: ${error}`);
     }
   }
 
-  /**
-   * Update Payment Security Policy
-   */
-  async updatePaymentSecurityPolicy(data: Partial<PaymentSecurityPolicy>): Promise<APIResponse<PaymentSecurityPolicy>> {
-    try {
-      const response = await apiClient.put<PaymentSecurityPolicy>(
-        API_ENDPOINTS.INFO.PAYMENT_SECURITY,
-        data
-      );
-      return response;
-    } catch (error) {
-      throw new Error(`Failed to update payment security policy: ${error}`);
-    }
-  }
-
   // ========================
-  // Cookie Policy
+  // Cookie Policy (Read Only)
   // ========================
 
   /**
@@ -285,30 +206,16 @@ class InfoService {
    */
   async getCookiePolicy(): Promise<APIResponse<CookiePolicy>> {
     try {
-      const response = await apiClient.get<CookiePolicy>(API_ENDPOINTS.INFO.COOKIE_POLICY);
-      return response;
+      await simulateDelay();
+
+      return createAPIResponse(infoData.cookiePolicy, 'Cookie policy retrieved successfully');
     } catch (error) {
       throw new Error(`Failed to fetch cookie policy: ${error}`);
     }
   }
 
-  /**
-   * Update Cookie Policy
-   */
-  async updateCookiePolicy(data: Partial<CookiePolicy>): Promise<APIResponse<CookiePolicy>> {
-    try {
-      const response = await apiClient.put<CookiePolicy>(
-        API_ENDPOINTS.INFO.COOKIE_POLICY,
-        data
-      );
-      return response;
-    } catch (error) {
-      throw new Error(`Failed to update cookie policy: ${error}`);
-    }
-  }
-
   // ========================
-  // Travel Guidelines
+  // Travel Guidelines (Read Only)
   // ========================
 
   /**
@@ -316,30 +223,16 @@ class InfoService {
    */
   async getTravelGuidelines(): Promise<APIResponse<TravelGuidelines>> {
     try {
-      const response = await apiClient.get<TravelGuidelines>(API_ENDPOINTS.INFO.TRAVEL_GUIDELINES);
-      return response;
+      await simulateDelay();
+
+      return createAPIResponse(infoData.travelGuidelines, 'Travel guidelines retrieved successfully');
     } catch (error) {
       throw new Error(`Failed to fetch travel guidelines: ${error}`);
     }
   }
 
-  /**
-   * Update Travel Guidelines
-   */
-  async updateTravelGuidelines(data: Partial<TravelGuidelines>): Promise<APIResponse<TravelGuidelines>> {
-    try {
-      const response = await apiClient.put<TravelGuidelines>(
-        API_ENDPOINTS.INFO.TRAVEL_GUIDELINES,
-        data
-      );
-      return response;
-    } catch (error) {
-      throw new Error(`Failed to update travel guidelines: ${error}`);
-    }
-  }
-
   // ========================
-  // Disclaimer
+  // Disclaimer (Read Only)
   // ========================
 
   /**
@@ -347,30 +240,16 @@ class InfoService {
    */
   async getDisclaimer(): Promise<APIResponse<Disclaimer>> {
     try {
-      const response = await apiClient.get<Disclaimer>(API_ENDPOINTS.INFO.DISCLAIMER);
-      return response;
+      await simulateDelay();
+
+      return createAPIResponse(infoData.disclaimer, 'Disclaimer retrieved successfully');
     } catch (error) {
       throw new Error(`Failed to fetch disclaimer: ${error}`);
     }
   }
 
-  /**
-   * Update Disclaimer
-   */
-  async updateDisclaimer(data: Partial<Disclaimer>): Promise<APIResponse<Disclaimer>> {
-    try {
-      const response = await apiClient.put<Disclaimer>(
-        API_ENDPOINTS.INFO.DISCLAIMER,
-        data
-      );
-      return response;
-    } catch (error) {
-      throw new Error(`Failed to update disclaimer: ${error}`);
-    }
-  }
-
   // ========================
-  // Customer Rights
+  // Customer Rights (Read Only)
   // ========================
 
   /**
@@ -378,30 +257,16 @@ class InfoService {
    */
   async getCustomerRights(): Promise<APIResponse<CustomerRights>> {
     try {
-      const response = await apiClient.get<CustomerRights>(API_ENDPOINTS.INFO.CUSTOMER_RIGHTS);
-      return response;
+      await simulateDelay();
+
+      return createAPIResponse(infoData.customerRights, 'Customer rights retrieved successfully');
     } catch (error) {
       throw new Error(`Failed to fetch customer rights: ${error}`);
     }
   }
 
-  /**
-   * Update Customer Rights
-   */
-  async updateCustomerRights(data: Partial<CustomerRights>): Promise<APIResponse<CustomerRights>> {
-    try {
-      const response = await apiClient.put<CustomerRights>(
-        API_ENDPOINTS.INFO.CUSTOMER_RIGHTS,
-        data
-      );
-      return response;
-    } catch (error) {
-      throw new Error(`Failed to update customer rights: ${error}`);
-    }
-  }
-
   // ========================
-  // Insurance and Liability Policy
+  // Insurance and Liability Policy (Read Only)
   // ========================
 
   /**
@@ -409,30 +274,16 @@ class InfoService {
    */
   async getInsuranceLiabilityPolicy(): Promise<APIResponse<InsuranceLiabilityPolicy>> {
     try {
-      const response = await apiClient.get<InsuranceLiabilityPolicy>(API_ENDPOINTS.INFO.INSURANCE_LIABILITY);
-      return response;
+      await simulateDelay();
+
+      return createAPIResponse(infoData.insuranceLiability, 'Insurance liability policy retrieved successfully');
     } catch (error) {
       throw new Error(`Failed to fetch insurance liability policy: ${error}`);
     }
   }
 
-  /**
-   * Update Insurance Liability Policy
-   */
-  async updateInsuranceLiabilityPolicy(data: Partial<InsuranceLiabilityPolicy>): Promise<APIResponse<InsuranceLiabilityPolicy>> {
-    try {
-      const response = await apiClient.put<InsuranceLiabilityPolicy>(
-        API_ENDPOINTS.INFO.INSURANCE_LIABILITY,
-        data
-      );
-      return response;
-    } catch (error) {
-      throw new Error(`Failed to update insurance liability policy: ${error}`);
-    }
-  }
-
   // ========================
-  // Legal Contact
+  // Legal Contact (Read Only)
   // ========================
 
   /**
@@ -440,30 +291,16 @@ class InfoService {
    */
   async getLegalContact(): Promise<APIResponse<LegalContact>> {
     try {
-      const response = await apiClient.get<LegalContact>(API_ENDPOINTS.INFO.LEGAL_CONTACT);
-      return response;
+      await simulateDelay();
+
+      return createAPIResponse(infoData.legalContact, 'Legal contact information retrieved successfully');
     } catch (error) {
       throw new Error(`Failed to fetch legal contact: ${error}`);
     }
   }
 
-  /**
-   * Update Legal Contact
-   */
-  async updateLegalContact(data: Partial<LegalContact>): Promise<APIResponse<LegalContact>> {
-    try {
-      const response = await apiClient.put<LegalContact>(
-        API_ENDPOINTS.INFO.LEGAL_CONTACT,
-        data
-      );
-      return response;
-    } catch (error) {
-      throw new Error(`Failed to update legal contact: ${error}`);
-    }
-  }
-
   // ========================
-  // Support
+  // Support (Read Only)
   // ========================
 
   /**
@@ -471,25 +308,11 @@ class InfoService {
    */
   async getSupport(): Promise<APIResponse<Support>> {
     try {
-      const response = await apiClient.get<Support>(API_ENDPOINTS.INFO.SUPPORT);
-      return response;
+      await simulateDelay();
+
+      return createAPIResponse(infoData.support, 'Support information retrieved successfully');
     } catch (error) {
       throw new Error(`Failed to fetch support information: ${error}`);
-    }
-  }
-
-  /**
-   * Update Support Information
-   */
-  async updateSupport(data: Partial<Support>): Promise<APIResponse<Support>> {
-    try {
-      const response = await apiClient.put<Support>(
-        API_ENDPOINTS.INFO.SUPPORT,
-        data
-      );
-      return response;
-    } catch (error) {
-      throw new Error(`Failed to update support information: ${error}`);
     }
   }
 
@@ -513,48 +336,22 @@ class InfoService {
     insuranceLiability: InsuranceLiabilityPolicy;
   }>> {
     try {
-      const [
-        privacyPolicy,
-        termsAndConditions,
-        refundPolicy,
-        shippingPolicy,
-        paymentSecurity,
-        cookiePolicy,
-        travelGuidelines,
-        disclaimer,
-        customerRights,
-        insuranceLiability
-      ] = await Promise.all([
-        this.getPrivacyPolicy(),
-        this.getTermsAndConditions(),
-        this.getRefundPolicy(),
-        this.getShippingPolicy(),
-        this.getPaymentSecurityPolicy(),
-        this.getCookiePolicy(),
-        this.getTravelGuidelines(),
-        this.getDisclaimer(),
-        this.getCustomerRights(),
-        this.getInsuranceLiabilityPolicy()
-      ]);
+      await simulateDelay(800); // Slightly longer delay for bulk operation
 
-      return {
-        success: true,
-        statusCode: 200,
-        message: 'All policies fetched successfully',
-        data: {
-          privacyPolicy: privacyPolicy.data,
-          termsAndConditions: termsAndConditions.data,
-          refundPolicy: refundPolicy.data,
-          shippingPolicy: shippingPolicy.data,
-          paymentSecurity: paymentSecurity.data,
-          cookiePolicy: cookiePolicy.data,
-          travelGuidelines: travelGuidelines.data,
-          disclaimer: disclaimer.data,
-          customerRights: customerRights.data,
-          insuranceLiability: insuranceLiability.data,
-        },
-        errors: []
+      const allPolicies = {
+        privacyPolicy: infoData.privacyPolicy,
+        termsAndConditions: infoData.termsAndConditions,
+        refundPolicy: infoData.refundPolicy,
+        shippingPolicy: infoData.shippingPolicy,
+        paymentSecurity: infoData.paymentSecurity,
+        cookiePolicy: infoData.cookiePolicy,
+        travelGuidelines: infoData.travelGuidelines,
+        disclaimer: infoData.disclaimer,
+        customerRights: infoData.customerRights,
+        insuranceLiability: infoData.insuranceLiability,
       };
+
+      return createAPIResponse(allPolicies, 'All policies retrieved successfully');
     } catch (error) {
       throw new Error(`Failed to fetch all policies: ${error}`);
     }
@@ -568,23 +365,45 @@ class InfoService {
     support: Support;
   }>> {
     try {
-      const [legalContact, support] = await Promise.all([
-        this.getLegalContact(),
-        this.getSupport()
-      ]);
+      await simulateDelay(400);
 
-      return {
-        success: true,
-        statusCode: 200,
-        message: 'Contact information fetched successfully',
-        data: {
-          legalContact: legalContact.data,
-          support: support.data,
-        },
-        errors: []
+      const contactInfo = {
+        legalContact: infoData.legalContact,
+        support: infoData.support,
       };
+
+      return createAPIResponse(contactInfo, 'Contact information retrieved successfully');
     } catch (error) {
       throw new Error(`Failed to fetch contact information: ${error}`);
+    }
+  }
+
+  /**
+   * Get all info data at once (useful for initial load)
+   */
+  async getAllInfoData(): Promise<APIResponse<typeof infoData>> {
+    try {
+      await simulateDelay(1000); // Longer delay for complete data load
+
+      return createAPIResponse(infoData, 'All information data retrieved successfully');
+    } catch (error) {
+      throw new Error(`Failed to fetch all info data: ${error}`);
+    }
+  }
+
+  /**
+   * Health check for the service
+   */
+  async healthCheck(): Promise<APIResponse<{ status: string; timestamp: Date }>> {
+    try {
+      const healthData = {
+        status: 'healthy',
+        timestamp: new Date()
+      };
+
+      return createAPIResponse(healthData, 'Info service is running properly');
+    } catch (error) {
+      throw new Error(`Health check failed: ${error}`);
     }
   }
 }

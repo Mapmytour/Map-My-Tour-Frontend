@@ -1,5 +1,5 @@
-import UserSidebar from '@/components/user/UserSidebar';
-import UserHeader from '@/components/user/UserHeader';
+// import UserSidebar from '@/components/user/UserSidebar';
+// import UserHeader from '@/components/user/UserHeader';
 
 export default function AuthLayout({
   children,
@@ -8,9 +8,9 @@ export default function AuthLayout({
 }) {
   return (
     <div className="min-h-screen bg-gray-50">
-      <UserHeader />
+      {/* <UserHeader /> */}
       <div className="flex">
-        <UserSidebar />
+        {/* <UserSidebar /> */}
         <main className="flex-1 p-6">
           {children}
         </main>

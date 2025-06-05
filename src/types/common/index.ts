@@ -1,7 +1,7 @@
 
 
-export const CURRENCIES = ['USD', 'EUR', 'GBP', 'CAD', 'AUD', 'JPY', 'SGD'] as const;
-export const LANGUAGES = ['en', 'es', 'fr', 'de', 'it', 'pt', 'ja', 'zh'] as const;
+export const CURRENCIES = ['INR', 'USD', 'EUR', 'GBP', 'CAD', 'AUD', 'JPY', 'SGD'] as const;
+export const LANGUAGES = ['in', 'en', 'es', 'fr', 'de', 'it', 'pt', 'ja', 'zh'] as const;
 export const TIMEZONES = [
   'UTC',
   'America/New_York',

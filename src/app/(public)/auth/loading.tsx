@@ -1,79 +1,50 @@
+'use client';
 
-export default function AuthLoading() {
+import React from 'react';
+import { Loader2, Shield } from 'lucide-react';
+
+interface AuthLoadingProps {
+  message?: string;
+  showIcon?: boolean;
+}
+
+export default function AuthLoading({
+  message = 'Loading...',
+  showIcon = true
+}: AuthLoadingProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center p-4">
-      {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-cyan-400/20 to-blue-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-      </div>
-
-      <div className="relative">
-        {/* Main Loading Card */}
-        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-12 space-y-8 transition-all duration-500">
-          
-          {/* Loading Icon */}
-          <div className="text-center space-y-6">
-            <div className="flex justify-center items-center py-4">
-              <div className="relative">
-                <img
-                  src="/logo.png"
-                  alt="Logo"
-                  className="w-20 sm:w-24 md:w-28 lg:w-32 object-contain"
-                />
-              </div>
-            </div>
-            
-            <div className="space-y-4">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent">
-                Loading Authentication
-              </h1>
-              <p className="text-gray-600 max-w-sm mx-auto leading-relaxed">
-                Please wait while we prepare your secure authentication experience...
-              </p>
-            </div>
-          </div>
-
-          {/* Loading Animation */}
-          <div className="flex items-center justify-center space-x-2">
-            <div className="flex space-x-1">
-              <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce"></div>
-              <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce delay-100"></div>
-              <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce delay-200"></div>
-            </div>
-          </div>
-
-          {/* Progress Bar */}
-          <div className="space-y-2">
-            <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-              <div className="h-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full animate-pulse"></div>
-            </div>
-            <p className="text-center text-sm text-gray-500">
-              Securing your connection...
-            </p>
-          </div>
-
-          {/* Features Preview */}
-          <div className="grid grid-cols-1 gap-3 text-center">
-            <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span>Secure SSL Connection</span>
-            </div>
-            <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
-              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse delay-100"></div>
-              <span>Two-Factor Authentication</span>
-            </div>
-            <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
-              <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse delay-200"></div>
-              <span>Advanced Security</span>
-            </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-pink-50">
+      <div className="text-center space-y-6 p-8">
+        {/* Logo or Brand */}
+        <div className="flex justify-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center">
+            {showIcon ? (
+              <Shield className="w-8 h-8 text-white" />
+            ) : (
+              <span className="text-white font-bold text-xl">MT</span>
+            )}
           </div>
         </div>
 
-        {/* Floating Elements */}
-        <div className="absolute -z-10 top-10 right-10 w-4 h-4 bg-blue-400 rounded-full animate-bounce delay-300"></div>
-        <div className="absolute -z-10 bottom-10 left-10 w-3 h-3 bg-indigo-400 rounded-full animate-bounce delay-700"></div>
-        <div className="absolute -z-10 top-1/2 left-0 w-2 h-2 bg-cyan-400 rounded-full animate-bounce delay-1000"></div>
+        {/* Loading Spinner */}
+        <div className="relative">
+          <div className="w-8 h-8 border-4 border-purple-200 rounded-full animate-spin mx-auto">
+            <div className="absolute top-0 left-0 w-full h-full border-4 border-transparent border-t-purple-600 rounded-full animate-spin"></div>
+          </div>
+        </div>
+
+        {/* Loading Message */}
+        <div className="space-y-2">
+          <p className="text-gray-700 font-medium">{message}</p>
+          <p className="text-gray-500 text-sm">Please wait while we verify your authentication...</p>
+        </div>
+
+        {/* Loading Animation Dots */}
+        <div className="flex justify-center space-x-1">
+          <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+          <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+          <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+        </div>
       </div>
     </div>
   );
