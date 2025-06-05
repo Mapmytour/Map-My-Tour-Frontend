@@ -1,3 +1,5 @@
+import PAYMENT_ENDPOINTS from "./api-endpoints-payment";
+
 export const API_ENDPOINTS = {
     AUTH: {
         LOGIN: '/auth/login',
@@ -19,33 +21,6 @@ export const API_ENDPOINTS = {
         UPDATE_PROFILE: '/user/profile',
         UPLOAD_AVATAR: '/user/avatar',
         DELETE_ACCOUNT: '/user/account',
-    },
-    INFO: {
-        // FAQ Management
-        FAQ: '/info/faq',
-        FAQ_BY_ID: '/info/faq/:id',
-        FAQ_BY_CATEGORY: '/info/faq/category/:category',
-        FAQ_SEARCH: '/info/faq/search',
-
-        // Policy Management
-        PRIVACY_POLICY: '/info/privacy-policy',
-        TERMS_CONDITIONS: '/info/terms-conditions',
-        REFUND_POLICY: '/info/refund-policy',
-        SHIPPING_POLICY: '/info/shipping-policy',
-        PAYMENT_SECURITY: '/info/payment-security',
-        COOKIE_POLICY: '/info/cookie-policy',
-
-        // Guidelines & Information
-        TRAVEL_GUIDELINES: '/info/travel-guidelines',
-        DISCLAIMER: '/info/disclaimer',
-        CUSTOMER_RIGHTS: '/info/customer-rights',
-        INSURANCE_LIABILITY: '/info/insurance-liability',
-
-        // Contact & Support
-        LEGAL_CONTACT: '/info/legal-contact',
-        SUPPORT: '/info/support',
-        ALL_POLICIES: '/info/policies',
-        ALL_CONTACT_INFO: '/info/contact',
     },
     QUOTE: {
         CREATE: '/quote/request',
@@ -759,7 +734,8 @@ export const API_ENDPOINTS = {
         AI_SUGGEST_MEALS: '/itineraries/:id/ai/suggest/meals',
         AI_BUDGET_OPTIMIZATION: '/itineraries/:id/ai/optimize/budget',
         AI_GENERATE_DESCRIPTION: '/itineraries/:id/ai/generate/description',
-    }
+    },
+    PAYMENT: PAYMENT_ENDPOINTS
 } as const;
 
 export default API_ENDPOINTS;

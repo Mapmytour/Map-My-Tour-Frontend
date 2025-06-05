@@ -1,4 +1,6 @@
 import { Metadata } from 'next';
+import { AuthProvider } from '@/context/AuthContext';
+import AuthRedirect from '@/components/auth/AuthRedirect';
 
 export const metadata: Metadata = {
   robots: {
@@ -13,8 +15,12 @@ interface AuthLayoutProps {
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <div className="min-h-screen flex flex-col">
-      {children}
-    </div>
+    <AuthProvider>
+      <AuthRedirect redirectTo="/">
+        <div className="min-h-screen flex flex-col">
+          {children}
+        </div>
+      </AuthRedirect>
+    </AuthProvider>
   );
 }

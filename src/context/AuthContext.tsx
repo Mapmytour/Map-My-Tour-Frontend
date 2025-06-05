@@ -1,3 +1,4 @@
+'use client';
 
 import React, { createContext, useContext, useEffect, ReactNode } from 'react';
 import { useAuth } from '@/hooks/use-auth';
@@ -10,7 +11,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
-  
+
   // Auth actions
   login: (credentials: any) => Promise<any>;
   register: (userData: any) => Promise<any>;
@@ -25,7 +26,7 @@ interface AuthContextType {
   checkEmailExists: (email: string) => Promise<boolean>;
   checkAuth: () => boolean;
   clearError: () => void;
-  
+
   // Forgot password methods
   forgotPasswordStep1: (data: any) => Promise<any>;
   forgotPasswordStep2: (data: any) => Promise<any>;
@@ -44,10 +45,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Initialize auth state when the app loads
   useEffect(() => {
-    if (auth.accessToken && !auth.user) {
+    // Only try to get current user if we have a token but no user data
+    if (auth.accessToken && !auth.user && !auth.isLoading) {
       auth.getCurrentUser();
     }
-  }, []);
+  }, [auth.accessToken, auth.user, auth.isLoading]); // Added proper dependencies
 
   return (
     <AuthContext.Provider value={auth}>

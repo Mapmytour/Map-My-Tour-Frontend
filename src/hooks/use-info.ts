@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect } from 'react';
 import { useInfoStore } from '@/store/info-store';
-import { infoService, FAQRequest, FAQUpdateRequest } from '@/service/info-service';
+import { infoService } from '@/service/info-service';
 import {
   FAQItem,
   PrivacyPolicy,
@@ -27,7 +27,7 @@ export const useInfo = () => {
     faqCategories,
     selectedFAQ,
     filteredFAQs,
-    
+
     // Policies State
     privacyPolicy,
     termsAndConditions,
@@ -39,32 +39,29 @@ export const useInfo = () => {
     disclaimer,
     customerRights,
     insuranceLiability,
-    
+
     // Contact & Support State
     legalContact,
     support,
-    
+
     // Loading States
     isLoading,
     faqsLoading,
     policiesLoading,
     contactLoading,
-    
+
     // Error States
     error,
     faqsError,
     policiesError,
     contactError,
-    
+
     // Search & Filter
     searchQuery,
     selectedCategory,
-    
+
     // Actions
     setFAQs,
-    addFAQ,
-    updateFAQ,
-    removeFAQ,
     setSelectedFAQ,
     setFAQCategories,
     setPrivacyPolicy,
@@ -96,7 +93,7 @@ export const useInfo = () => {
   } = useInfoStore();
 
   // ========================
-  // FAQ Management
+  // FAQ Management (Read Only)
   // ========================
 
   /**
@@ -112,7 +109,7 @@ export const useInfo = () => {
       setFAQsError(null);
 
       const response = await infoService.getAllFAQs(category);
-      
+
       if (response.success) {
         setFAQs(response.data);
         updateCacheTimestamp('faqs');
@@ -139,7 +136,7 @@ export const useInfo = () => {
       setError(null);
 
       const response = await infoService.getFAQById(id);
-      
+
       if (response.success) {
         setSelectedFAQ(response.data);
         return { success: true, data: response.data };
@@ -157,84 +154,6 @@ export const useInfo = () => {
   }, [setLoading, setError, setSelectedFAQ]);
 
   /**
-   * Create new FAQ
-   */
-  const createFAQ = useCallback(async (data: FAQRequest) => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await infoService.createFAQ(data);
-      
-      if (response.success) {
-        addFAQ(response.data);
-        return { success: true, data: response.data };
-      } else {
-        setError(response.message || 'Failed to create FAQ');
-        return { success: false, error: response.message };
-      }
-    } catch (error) {
-      const errorMessage = handleApiError(error);
-      setError(errorMessage);
-      return { success: false, error: errorMessage };
-    } finally {
-      setLoading(false);
-    }
-  }, [addFAQ, setLoading, setError]);
-
-  /**
-   * Update FAQ
-   */
-  const updateFAQItem = useCallback(async (data: FAQUpdateRequest) => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await infoService.updateFAQ(data);
-      
-      if (response.success) {
-        updateFAQ(response.data);
-        return { success: true, data: response.data };
-      } else {
-        setError(response.message || 'Failed to update FAQ');
-        return { success: false, error: response.message };
-      }
-    } catch (error) {
-      const errorMessage = handleApiError(error);
-      setError(errorMessage);
-      return { success: false, error: errorMessage };
-    } finally {
-      setLoading(false);
-    }
-  }, [updateFAQ, setLoading, setError]);
-
-  /**
-   * Delete FAQ
-   */
-  const deleteFAQ = useCallback(async (id: string) => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await infoService.deleteFAQ(id);
-      
-      if (response.success) {
-        removeFAQ(id);
-        return { success: true, message: response.message };
-      } else {
-        setError(response.message || 'Failed to delete FAQ');
-        return { success: false, error: response.message };
-      }
-    } catch (error) {
-      const errorMessage = handleApiError(error);
-      setError(errorMessage);
-      return { success: false, error: errorMessage };
-    } finally {
-      setLoading(false);
-    }
-  }, [removeFAQ, setLoading, setError]);
-
-  /**
    * Search FAQs
    */
   const searchFAQs = useCallback(async (query: string, category?: string) => {
@@ -243,7 +162,7 @@ export const useInfo = () => {
       setFAQsError(null);
 
       const response = await infoService.searchFAQs(query, category);
-      
+
       if (response.success) {
         setFAQs(response.data);
         return { success: true, data: response.data };
@@ -260,8 +179,34 @@ export const useInfo = () => {
     }
   }, [setFAQs, setFAQsLoading, setFAQsError]);
 
+  /**
+   * Get FAQ categories
+   */
+  const getFAQCategories = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await infoService.getFAQCategories();
+
+      if (response.success) {
+        setFAQCategories(response.data);
+        return { success: true, data: response.data };
+      } else {
+        setError(response.message || 'Failed to fetch FAQ categories');
+        return { success: false, error: response.message };
+      }
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      setError(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setLoading(false);
+    }
+  }, [setFAQCategories, setLoading, setError]);
+
   // ========================
-  // Policy Management
+  // Policy Management (Read Only)
   // ========================
 
   /**
@@ -277,7 +222,7 @@ export const useInfo = () => {
       setPoliciesError(null);
 
       const response = await infoService.getPrivacyPolicy();
-      
+
       if (response.success) {
         setPrivacyPolicy(response.data);
         updateCacheTimestamp('policies');
@@ -296,32 +241,6 @@ export const useInfo = () => {
   }, [privacyPolicy, isCacheValid, setPrivacyPolicy, setPoliciesLoading, setPoliciesError, updateCacheTimestamp]);
 
   /**
-   * Update Privacy Policy
-   */
-  const updatePrivacyPolicy = useCallback(async (data: Partial<PrivacyPolicy>) => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await infoService.updatePrivacyPolicy(data);
-      
-      if (response.success) {
-        setPrivacyPolicy(response.data);
-        return { success: true, data: response.data };
-      } else {
-        setError(response.message || 'Failed to update privacy policy');
-        return { success: false, error: response.message };
-      }
-    } catch (error) {
-      const errorMessage = handleApiError(error);
-      setError(errorMessage);
-      return { success: false, error: errorMessage };
-    } finally {
-      setLoading(false);
-    }
-  }, [setPrivacyPolicy, setLoading, setError]);
-
-  /**
    * Get Terms and Conditions
    */
   const getTermsAndConditions = useCallback(async (forceRefresh?: boolean) => {
@@ -334,7 +253,7 @@ export const useInfo = () => {
       setPoliciesError(null);
 
       const response = await infoService.getTermsAndConditions();
-      
+
       if (response.success) {
         setTermsAndConditions(response.data);
         updateCacheTimestamp('policies');
@@ -353,30 +272,252 @@ export const useInfo = () => {
   }, [termsAndConditions, isCacheValid, setTermsAndConditions, setPoliciesLoading, setPoliciesError, updateCacheTimestamp]);
 
   /**
-   * Update Terms and Conditions
+   * Get Refund Policy
    */
-  const updateTermsAndConditions = useCallback(async (data: Partial<TermsAndConditions>) => {
+  const getRefundPolicy = useCallback(async (forceRefresh?: boolean) => {
     try {
-      setLoading(true);
-      setError(null);
+      if (!forceRefresh && isCacheValid('policies') && refundPolicy) {
+        return { success: true, data: refundPolicy };
+      }
 
-      const response = await infoService.updateTermsAndConditions(data);
-      
+      setPoliciesLoading(true);
+      setPoliciesError(null);
+
+      const response = await infoService.getRefundPolicy();
+
       if (response.success) {
-        setTermsAndConditions(response.data);
+        setRefundPolicy(response.data);
+        updateCacheTimestamp('policies');
         return { success: true, data: response.data };
       } else {
-        setError(response.message || 'Failed to update terms and conditions');
+        setPoliciesError(response.message || 'Failed to fetch refund policy');
         return { success: false, error: response.message };
       }
     } catch (error) {
       const errorMessage = handleApiError(error);
-      setError(errorMessage);
+      setPoliciesError(errorMessage);
       return { success: false, error: errorMessage };
     } finally {
-      setLoading(false);
+      setPoliciesLoading(false);
     }
-  }, [setTermsAndConditions, setLoading, setError]);
+  }, [refundPolicy, isCacheValid, setRefundPolicy, setPoliciesLoading, setPoliciesError, updateCacheTimestamp]);
+
+  /**
+   * Get Shipping Policy
+   */
+  const getShippingPolicy = useCallback(async (forceRefresh?: boolean) => {
+    try {
+      if (!forceRefresh && isCacheValid('policies') && shippingPolicy) {
+        return { success: true, data: shippingPolicy };
+      }
+
+      setPoliciesLoading(true);
+      setPoliciesError(null);
+
+      const response = await infoService.getShippingPolicy();
+
+      if (response.success) {
+        setShippingPolicy(response.data);
+        updateCacheTimestamp('policies');
+        return { success: true, data: response.data };
+      } else {
+        setPoliciesError(response.message || 'Failed to fetch shipping policy');
+        return { success: false, error: response.message };
+      }
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      setPoliciesError(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setPoliciesLoading(false);
+    }
+  }, [shippingPolicy, isCacheValid, setShippingPolicy, setPoliciesLoading, setPoliciesError, updateCacheTimestamp]);
+
+  /**
+   * Get Payment Security Policy
+   */
+  const getPaymentSecurityPolicy = useCallback(async (forceRefresh?: boolean) => {
+    try {
+      if (!forceRefresh && isCacheValid('policies') && paymentSecurity) {
+        return { success: true, data: paymentSecurity };
+      }
+
+      setPoliciesLoading(true);
+      setPoliciesError(null);
+
+      const response = await infoService.getPaymentSecurityPolicy();
+
+      if (response.success) {
+        setPaymentSecurity(response.data);
+        updateCacheTimestamp('policies');
+        return { success: true, data: response.data };
+      } else {
+        setPoliciesError(response.message || 'Failed to fetch payment security policy');
+        return { success: false, error: response.message };
+      }
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      setPoliciesError(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setPoliciesLoading(false);
+    }
+  }, [paymentSecurity, isCacheValid, setPaymentSecurity, setPoliciesLoading, setPoliciesError, updateCacheTimestamp]);
+
+  /**
+   * Get Cookie Policy
+   */
+  const getCookiePolicy = useCallback(async (forceRefresh?: boolean) => {
+    try {
+      if (!forceRefresh && isCacheValid('policies') && cookiePolicy) {
+        return { success: true, data: cookiePolicy };
+      }
+
+      setPoliciesLoading(true);
+      setPoliciesError(null);
+
+      const response = await infoService.getCookiePolicy();
+
+      if (response.success) {
+        setCookiePolicy(response.data);
+        updateCacheTimestamp('policies');
+        return { success: true, data: response.data };
+      } else {
+        setPoliciesError(response.message || 'Failed to fetch cookie policy');
+        return { success: false, error: response.message };
+      }
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      setPoliciesError(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setPoliciesLoading(false);
+    }
+  }, [cookiePolicy, isCacheValid, setCookiePolicy, setPoliciesLoading, setPoliciesError, updateCacheTimestamp]);
+
+  /**
+   * Get Travel Guidelines
+   */
+  const getTravelGuidelines = useCallback(async (forceRefresh?: boolean) => {
+    try {
+      if (!forceRefresh && isCacheValid('policies') && travelGuidelines) {
+        return { success: true, data: travelGuidelines };
+      }
+
+      setPoliciesLoading(true);
+      setPoliciesError(null);
+
+      const response = await infoService.getTravelGuidelines();
+
+      if (response.success) {
+        setTravelGuidelines(response.data);
+        updateCacheTimestamp('policies');
+        return { success: true, data: response.data };
+      } else {
+        setPoliciesError(response.message || 'Failed to fetch travel guidelines');
+        return { success: false, error: response.message };
+      }
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      setPoliciesError(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setPoliciesLoading(false);
+    }
+  }, [travelGuidelines, isCacheValid, setTravelGuidelines, setPoliciesLoading, setPoliciesError, updateCacheTimestamp]);
+
+  /**
+   * Get Disclaimer
+   */
+  const getDisclaimer = useCallback(async (forceRefresh?: boolean) => {
+    try {
+      if (!forceRefresh && isCacheValid('policies') && disclaimer) {
+        return { success: true, data: disclaimer };
+      }
+
+      setPoliciesLoading(true);
+      setPoliciesError(null);
+
+      const response = await infoService.getDisclaimer();
+
+      if (response.success) {
+        setDisclaimer(response.data);
+        updateCacheTimestamp('policies');
+        return { success: true, data: response.data };
+      } else {
+        setPoliciesError(response.message || 'Failed to fetch disclaimer');
+        return { success: false, error: response.message };
+      }
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      setPoliciesError(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setPoliciesLoading(false);
+    }
+  }, [disclaimer, isCacheValid, setDisclaimer, setPoliciesLoading, setPoliciesError, updateCacheTimestamp]);
+
+  /**
+   * Get Customer Rights
+   */
+  const getCustomerRights = useCallback(async (forceRefresh?: boolean) => {
+    try {
+      if (!forceRefresh && isCacheValid('policies') && customerRights) {
+        return { success: true, data: customerRights };
+      }
+
+      setPoliciesLoading(true);
+      setPoliciesError(null);
+
+      const response = await infoService.getCustomerRights();
+
+      if (response.success) {
+        setCustomerRights(response.data);
+        updateCacheTimestamp('policies');
+        return { success: true, data: response.data };
+      } else {
+        setPoliciesError(response.message || 'Failed to fetch customer rights');
+        return { success: false, error: response.message };
+      }
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      setPoliciesError(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setPoliciesLoading(false);
+    }
+  }, [customerRights, isCacheValid, setCustomerRights, setPoliciesLoading, setPoliciesError, updateCacheTimestamp]);
+
+  /**
+   * Get Insurance Liability Policy
+   */
+  const getInsuranceLiabilityPolicy = useCallback(async (forceRefresh?: boolean) => {
+    try {
+      if (!forceRefresh && isCacheValid('policies') && insuranceLiability) {
+        return { success: true, data: insuranceLiability };
+      }
+
+      setPoliciesLoading(true);
+      setPoliciesError(null);
+
+      const response = await infoService.getInsuranceLiabilityPolicy();
+
+      if (response.success) {
+        setInsuranceLiability(response.data);
+        updateCacheTimestamp('policies');
+        return { success: true, data: response.data };
+      } else {
+        setPoliciesError(response.message || 'Failed to fetch insurance liability policy');
+        return { success: false, error: response.message };
+      }
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      setPoliciesError(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setPoliciesLoading(false);
+    }
+  }, [insuranceLiability, isCacheValid, setInsuranceLiability, setPoliciesLoading, setPoliciesError, updateCacheTimestamp]);
 
   /**
    * Get all policies at once
@@ -391,7 +532,7 @@ export const useInfo = () => {
       setPoliciesError(null);
 
       const response = await infoService.getAllPolicies();
-      
+
       if (response.success) {
         const { data } = response;
         setPrivacyPolicy(data.privacyPolicy);
@@ -435,7 +576,7 @@ export const useInfo = () => {
   ]);
 
   // ========================
-  // Contact & Support Management
+  // Contact & Support Management (Read Only)
   // ========================
 
   /**
@@ -451,7 +592,7 @@ export const useInfo = () => {
       setContactError(null);
 
       const response = await infoService.getLegalContact();
-      
+
       if (response.success) {
         setLegalContact(response.data);
         updateCacheTimestamp('contact');
@@ -482,7 +623,7 @@ export const useInfo = () => {
       setContactError(null);
 
       const response = await infoService.getSupport();
-      
+
       if (response.success) {
         setSupport(response.data);
         updateCacheTimestamp('contact');
@@ -513,7 +654,7 @@ export const useInfo = () => {
       setContactError(null);
 
       const response = await infoService.getAllContactInfo();
-      
+
       if (response.success) {
         const { data } = response;
         setLegalContact(data.legalContact);
@@ -551,6 +692,70 @@ export const useInfo = () => {
       console.error('Failed to initialize info data:', error);
     }
   }, [getAllFAQs, getAllPolicies, getAllContactInfo]);
+
+  /**
+   * Get all info data at once (bulk load)
+   */
+  const getAllInfoData = useCallback(async (forceRefresh?: boolean) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await infoService.getAllInfoData();
+
+      if (response.success) {
+        const { data } = response;
+
+        // Set all data at once
+        setFAQs(data.faqs);
+        setPrivacyPolicy(data.privacyPolicy);
+        setTermsAndConditions(data.termsAndConditions);
+        setRefundPolicy(data.refundPolicy);
+        setShippingPolicy(data.shippingPolicy);
+        setPaymentSecurity(data.paymentSecurity);
+        setCookiePolicy(data.cookiePolicy);
+        setTravelGuidelines(data.travelGuidelines);
+        setDisclaimer(data.disclaimer);
+        setCustomerRights(data.customerRights);
+        setInsuranceLiability(data.insuranceLiability);
+        setLegalContact(data.legalContact);
+        setSupport(data.support);
+
+        // Update all cache timestamps
+        updateCacheTimestamp('faqs');
+        updateCacheTimestamp('policies');
+        updateCacheTimestamp('contact');
+
+        return { success: true, data: data };
+      } else {
+        setError(response.message || 'Failed to fetch all info data');
+        return { success: false, error: response.message };
+      }
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      setError(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setLoading(false);
+    }
+  }, [
+    setFAQs,
+    setPrivacyPolicy,
+    setTermsAndConditions,
+    setRefundPolicy,
+    setShippingPolicy,
+    setPaymentSecurity,
+    setCookiePolicy,
+    setTravelGuidelines,
+    setDisclaimer,
+    setCustomerRights,
+    setInsuranceLiability,
+    setLegalContact,
+    setSupport,
+    setLoading,
+    setError,
+    updateCacheTimestamp
+  ]);
 
   /**
    * Clear all errors
@@ -595,45 +800,50 @@ export const useInfo = () => {
     insuranceLiability,
     legalContact,
     support,
-    
+
     // Loading States
     isLoading,
     faqsLoading,
     policiesLoading,
     contactLoading,
-    
+
     // Error States
     error,
     faqsError,
     policiesError,
     contactError,
-    
+
     // Search & Filter
     searchQuery,
     selectedCategory,
-    
-    // FAQ Actions
+
+    // FAQ Actions (Read Only)
     getAllFAQs,
     getFAQById,
-    createFAQ,
-    updateFAQItem,
-    deleteFAQ,
     searchFAQs,
+    getFAQCategories,
     setSelectedFAQ,
-    
-    // Policy Actions
+
+    // Policy Actions (Read Only)
     getPrivacyPolicy,
-    updatePrivacyPolicy,
     getTermsAndConditions,
-    updateTermsAndConditions,
+    getRefundPolicy,
+    getShippingPolicy,
+    getPaymentSecurityPolicy,
+    getCookiePolicy,
+    getTravelGuidelines,
+    getDisclaimer,
+    getCustomerRights,
+    getInsuranceLiabilityPolicy,
     getAllPolicies,
-    
-    // Contact Actions
+
+    // Contact Actions (Read Only)
     getLegalContact,
     getSupport,
     getAllContactInfo,
-    
+
     // Utility Actions
+    getAllInfoData,
     initializeInfoData,
     clearAllErrors,
     filterFAQs,
