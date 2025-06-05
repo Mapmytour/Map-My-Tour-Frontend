@@ -1,4 +1,3 @@
-import NotificationItem from '@/components/user/NotificationItem';
 
 export default function NotificationsPage() {
   const notifications = [
@@ -12,11 +11,9 @@ export default function NotificationsPage() {
         <h1 className="text-3xl font-bold">Notifications</h1>
         <button className="text-blue-600 hover:text-blue-700">Mark all as read</button>
       </div>
-      
+
       <div className="space-y-4">
-        {notifications.map(notification => (
-          <NotificationItem key={notification.id} notification={notification} />
-        ))}
+        Notificaiton Items
       </div>
     </div>
   );

@@ -3,13 +3,8 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import {
     Itinerary,
     ItineraryDay,
-    ItineraryActivity,
-    ItineraryMeal,
-    ItineraryAccommodation,
-    NearbyPlace,
     Participant,
     ItineraryFilters,
-    ItineraryStatus,
 } from '@/types/itinerary';
 
 interface ItineraryState {

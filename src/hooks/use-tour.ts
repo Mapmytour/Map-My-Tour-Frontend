@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect } from 'react';
 import { useTourStore } from '@/store/tour-store';
-import { 
+import {
   tourService,
   CreateTourRequest,
   UpdateTourRequest,
@@ -49,7 +49,7 @@ export const useTour = () => {
     popularTours,
     featuredTours,
     tourStats,
-    
+
     // Loading States
     isLoading,
     toursLoading,
@@ -60,7 +60,7 @@ export const useTour = () => {
     reviewsLoading,
     categoriesLoading,
     guidesLoading,
-    
+
     // Error States
     error,
     toursError,
@@ -71,11 +71,11 @@ export const useTour = () => {
     reviewsError,
     categoriesError,
     guidesError,
-    
+
     // Search & Filter State
     searchQuery,
     selectedFilters,
-    
+
     // Actions
     setTours,
     addTour,
@@ -137,7 +137,7 @@ export const useTour = () => {
       setToursError(null);
 
       const response = await tourService.getAllTours(filters);
-      
+
       if (response.success) {
         setTours(response.data.tours);
         updateCacheTimestamp('tours');
@@ -167,7 +167,7 @@ export const useTour = () => {
       setError(null);
 
       const response = await tourService.getTourById(id);
-      
+
       if (response.success) {
         setSelectedTour(response.data);
         return { success: true, data: response.data };
@@ -196,7 +196,7 @@ export const useTour = () => {
       setError(null);
 
       const response = await tourService.getTourBySlug(slug);
-      
+
       if (response.success) {
         setSelectedTour(response.data);
         return { success: true, data: response.data };
@@ -225,7 +225,7 @@ export const useTour = () => {
       setError(null);
 
       const response = await tourService.createTour(data);
-      
+
       if (response.success) {
         addTour(response.data);
         toast.success('Tour created successfully');
@@ -255,7 +255,7 @@ export const useTour = () => {
       setError(null);
 
       const response = await tourService.updateTour(data);
-      
+
       if (response.success) {
         updateTour(response.data);
         toast.success('Tour updated successfully');
@@ -285,7 +285,7 @@ export const useTour = () => {
       setError(null);
 
       const response = await tourService.deleteTour(id);
-      
+
       if (response.success) {
         removeTour(id);
         toast.success('Tour deleted successfully');
@@ -315,7 +315,7 @@ export const useTour = () => {
       setError(null);
 
       const response = await tourService.duplicateTour(id, newTitle);
-      
+
       if (response.success) {
         addTour(response.data);
         toast.success('Tour duplicated successfully');
@@ -349,11 +349,18 @@ export const useTour = () => {
       setSearchError(null);
 
       const response = await tourService.searchTours(request);
-      
+
       if (response.success) {
         setFilteredTours(response.data.tours);
         setSearchQuery(request.query);
-        setSelectedFilters(request.filters || {});
+        setSelectedFilters(request.filters || {
+          categories: [],
+          destinations: [],
+          priceRange: [0, 0],
+          duration: [],
+          difficulty: [],
+          rating: 0,
+        });
         return { success: true, data: response.data };
       } else {
         const errorMessage = response.message || 'Failed to search tours';
@@ -380,7 +387,7 @@ export const useTour = () => {
       setSearchError(null);
 
       const response = await tourService.filterTours(filters);
-      
+
       if (response.success) {
         setFilteredTours(response.data);
         setSelectedFilters(filters);
@@ -408,7 +415,7 @@ export const useTour = () => {
       setSearchError(null);
 
       const response = await tourService.getToursByCategory(category);
-      
+
       if (response.success) {
         setFilteredTours(response.data);
         return { success: true, data: response.data };
@@ -435,7 +442,7 @@ export const useTour = () => {
       setSearchError(null);
 
       const response = await tourService.getToursByDestination(destinationId);
-      
+
       if (response.success) {
         setFilteredTours(response.data);
         return { success: true, data: response.data };
@@ -466,7 +473,7 @@ export const useTour = () => {
       setAvailabilityError(null);
 
       const response = await tourService.getTourAvailability(id, dateRange);
-      
+
       if (response.success) {
         return { success: true, data: response.data };
       } else {
@@ -492,7 +499,7 @@ export const useTour = () => {
       setAvailabilityError(null);
 
       const response = await tourService.createTourAvailability(tourId, data);
-      
+
       if (response.success) {
         toast.success('Availability created successfully');
         return { success: true, data: response.data };
@@ -521,7 +528,7 @@ export const useTour = () => {
       setAvailabilityError(null);
 
       const response = await tourService.updateTourAvailability(tourId, data);
-      
+
       if (response.success) {
         toast.success('Availability updated successfully');
         return { success: true, data: response.data };
@@ -550,7 +557,7 @@ export const useTour = () => {
       setAvailabilityError(null);
 
       const response = await tourService.checkTourAvailability(id, request);
-      
+
       if (response.success) {
         return { success: true, data: response.data };
       } else {
@@ -580,7 +587,7 @@ export const useTour = () => {
       setItineraryError(null);
 
       const response = await tourService.getTourItinerary(id);
-      
+
       if (response.success) {
         return { success: true, data: response.data };
       } else {
@@ -606,7 +613,7 @@ export const useTour = () => {
       setItineraryError(null);
 
       const response = await tourService.updateTourItinerary(id, data);
-      
+
       if (response.success) {
         toast.success('Itinerary updated successfully');
         // Update the selected tour with new itinerary
@@ -639,7 +646,7 @@ export const useTour = () => {
       setItineraryError(null);
 
       const response = await tourService.addItineraryDay(tourId, data);
-      
+
       if (response.success) {
         toast.success('Itinerary day added successfully');
         // Refresh tour itinerary
@@ -670,7 +677,7 @@ export const useTour = () => {
       setItineraryError(null);
 
       const response = await tourService.updateItineraryDay(tourId, data);
-      
+
       if (response.success) {
         toast.success('Itinerary day updated successfully');
         return { success: true, data: response.data };
@@ -699,7 +706,7 @@ export const useTour = () => {
       setItineraryError(null);
 
       const response = await tourService.deleteItineraryDay(tourId, day);
-      
+
       if (response.success) {
         toast.success('Itinerary day deleted successfully');
         // Refresh tour itinerary
@@ -734,7 +741,7 @@ export const useTour = () => {
       setError(null);
 
       const response = await tourService.uploadTourImages(id, files);
-      
+
       if (response.success) {
         toast.success('Images uploaded successfully');
         // Refresh tour data to get updated images
@@ -765,7 +772,7 @@ export const useTour = () => {
       setError(null);
 
       const response = await tourService.deleteTourImage(id, imageId);
-      
+
       if (response.success) {
         toast.success('Image deleted successfully');
         // Refresh tour data to get updated images
@@ -796,7 +803,7 @@ export const useTour = () => {
       setError(null);
 
       const response = await tourService.setPrimaryImage(id, imageId);
-      
+
       if (response.success) {
         updateTour(response.data);
         toast.success('Primary image updated successfully');
@@ -830,7 +837,7 @@ export const useTour = () => {
       setReviewsError(null);
 
       const response = await tourService.getTourReviews(id, page, limit);
-      
+
       if (response.success) {
         return { success: true, data: response.data };
       } else {
@@ -856,7 +863,7 @@ export const useTour = () => {
       setError(null);
 
       const response = await tourService.addTourReview(id, review);
-      
+
       if (response.success) {
         toast.success('Review added successfully');
         return { success: true, data: response.data };
@@ -893,7 +900,7 @@ export const useTour = () => {
       setCategoriesError(null);
 
       const response = await tourService.getTourCategories();
-      
+
       if (response.success) {
         setCategories(response.data);
         updateCacheTimestamp('categories');
@@ -921,7 +928,7 @@ export const useTour = () => {
       setError(null);
 
       const response = await tourService.createTourCategory(data);
-      
+
       if (response.success) {
         addCategory(response.data);
         toast.success('Category created successfully');
@@ -959,7 +966,7 @@ export const useTour = () => {
       setGuidesError(null);
 
       const response = await tourService.getGuides();
-      
+
       if (response.success) {
         setGuides(response.data);
         updateCacheTimestamp('guides');
@@ -987,7 +994,7 @@ export const useTour = () => {
       setError(null);
 
       const response = await tourService.createGuide(data);
-      
+
       if (response.success) {
         addGuide(response.data);
         toast.success('Guide created successfully');
@@ -1021,7 +1028,7 @@ export const useTour = () => {
       setError(null);
 
       const response = await tourService.updateTourPricing(id, data);
-      
+
       if (response.success) {
         updateTour(response.data);
         toast.success('Pricing updated successfully');
@@ -1059,7 +1066,7 @@ export const useTour = () => {
       setError(null);
 
       const response = await tourService.getTourStats();
-      
+
       if (response.success) {
         setTourStats(response.data);
         updateCacheTimestamp('stats');
@@ -1088,7 +1095,7 @@ export const useTour = () => {
       }
 
       const response = await tourService.getPopularTours(limit);
-      
+
       if (response.success) {
         setPopularTours(response.data);
         updateCacheTimestamp('popular');
@@ -1112,7 +1119,7 @@ export const useTour = () => {
       }
 
       const response = await tourService.getFeaturedTours(limit);
-      
+
       if (response.success) {
         setFeaturedTours(response.data);
         updateCacheTimestamp('featured');
@@ -1139,7 +1146,7 @@ export const useTour = () => {
       setError(null);
 
       const response = await tourService.bulkUpdateStatus(tourIds, status);
-      
+
       if (response.success) {
         toast.success(`${response.data.updated} tours updated successfully`);
         // Refresh tours list
@@ -1170,7 +1177,7 @@ export const useTour = () => {
       setError(null);
 
       const response = await tourService.bulkAssignGuide(data);
-      
+
       if (response.success) {
         toast.success(`${response.data.updated} tours updated with new guide successfully`);
         // Refresh tours list
@@ -1205,7 +1212,7 @@ export const useTour = () => {
       setError(null);
 
       const response = await tourService.exportTours(filters, format);
-      
+
       if (response.success) {
         toast.success('Tours exported successfully');
         return { success: true, data: response.data };
@@ -1234,7 +1241,7 @@ export const useTour = () => {
       setError(null);
 
       const response = await tourService.importTours(data);
-      
+
       if (response.success) {
         toast.success(`${response.data.imported} tours imported successfully`);
         if (response.data.errors.length > 0) {
@@ -1293,7 +1300,14 @@ export const useTour = () => {
    */
   const clearSearch = useCallback(() => {
     setSearchQuery('');
-    setSelectedFilters({});
+    setSelectedFilters({
+      categories: [],
+      destinations: [],
+      priceRange: [0, 0],
+      duration: [],
+      difficulty: [],
+      rating: 0,
+    });
     setFilteredTours([]);
   }, [setSearchQuery, setSelectedFilters, setFilteredTours]);
 
@@ -1315,7 +1329,7 @@ export const useTour = () => {
     popularTours,
     featuredTours,
     tourStats,
-    
+
     // Loading States
     isLoading,
     toursLoading,
@@ -1326,7 +1340,7 @@ export const useTour = () => {
     reviewsLoading,
     categoriesLoading,
     guidesLoading,
-    
+
     // Error States
     error,
     toursError,
@@ -1337,11 +1351,11 @@ export const useTour = () => {
     reviewsError,
     categoriesError,
     guidesError,
-    
+
     // Search & Filter State
     searchQuery,
     selectedFilters,
-    
+
     // Basic CRUD Actions
     getAllTours,
     getTourById,
@@ -1351,60 +1365,60 @@ export const useTour = () => {
     deleteTour,
     duplicateTour,
     setSelectedTour,
-    
+
     // Search and Filter Actions
     searchTours,
     filterTours,
     getToursByCategory,
     getToursByDestination,
     clearSearch,
-    
+
     // Availability Actions
     getTourAvailability,
     createTourAvailability,
     updateTourAvailability,
     checkTourAvailability,
-    
+
     // Itinerary Actions
     getTourItinerary,
     updateTourItinerary,
     addItineraryDay,
     updateItineraryDay,
     deleteItineraryDay,
-    
+
     // Media Actions
     uploadTourImages,
     deleteTourImage,
     setPrimaryImage,
-    
+
     // Review Actions
     getTourReviews,
     addTourReview,
-    
+
     // Category Actions
     getTourCategories,
     createTourCategory,
-    
+
     // Guide Actions
     getGuides,
     createGuide,
-    
+
     // Pricing Actions
     updateTourPricing,
-    
+
     // Statistics Actions
     getTourStats,
     getPopularTours,
     getFeaturedTours,
-    
+
     // Bulk Actions
     bulkUpdateStatus,
     bulkAssignGuide,
-    
+
     // Import/Export Actions
     exportTours,
     importTours,
-    
+
     // Utility Actions
     initializeTourData,
     clearAllErrors,

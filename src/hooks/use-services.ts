@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect } from 'react';
 import { useServicesStore } from '@/store/services-store';
-import { 
+import {
   servicesService,
   CreateServiceRequest,
   UpdateServiceRequest,
@@ -40,7 +40,7 @@ export const useServices = () => {
     popularServices,
     featuredServices,
     serviceStats,
-    
+
     // Loading States
     isLoading,
     servicesLoading,
@@ -50,7 +50,7 @@ export const useServices = () => {
     availabilityLoading,
     bookingsLoading,
     reviewsLoading,
-    
+
     // Error States
     error,
     servicesError,
@@ -60,11 +60,11 @@ export const useServices = () => {
     availabilityError,
     bookingsError,
     reviewsError,
-    
+
     // Search & Filter State
     searchQuery,
     selectedFilters,
-    
+
     // Actions
     setServices,
     addService,
@@ -123,7 +123,7 @@ export const useServices = () => {
       setServicesError(null);
 
       const response = await servicesService.getAllServices(filters);
-      
+
       if (response.success) {
         setServices(response.data.services);
         updateCacheTimestamp('services');
@@ -153,7 +153,7 @@ export const useServices = () => {
       setError(null);
 
       const response = await servicesService.getServiceById(id);
-      
+
       if (response.success) {
         setSelectedService(response.data);
         return { success: true, data: response.data };
@@ -182,7 +182,7 @@ export const useServices = () => {
       setError(null);
 
       const response = await servicesService.getServiceBySlug(slug);
-      
+
       if (response.success) {
         setSelectedService(response.data);
         return { success: true, data: response.data };
@@ -211,7 +211,7 @@ export const useServices = () => {
       setError(null);
 
       const response = await servicesService.createService(data);
-      
+
       if (response.success) {
         addService(response.data);
         toast.success('Service created successfully');
@@ -241,7 +241,7 @@ export const useServices = () => {
       setError(null);
 
       const response = await servicesService.updateService(data);
-      
+
       if (response.success) {
         updateService(response.data);
         toast.success('Service updated successfully');
@@ -271,7 +271,7 @@ export const useServices = () => {
       setError(null);
 
       const response = await servicesService.deleteService(id);
-      
+
       if (response.success) {
         removeService(id);
         toast.success('Service deleted successfully');
@@ -305,11 +305,11 @@ export const useServices = () => {
       setSearchError(null);
 
       const response = await servicesService.searchServices(request);
-      
+
       if (response.success) {
         setFilteredServices(response.data.services);
         setSearchQuery(request.query);
-        setSelectedFilters(request.filters || {});
+        setSelectedFilters(request.filters ?? { categories: [], types: [], priceRange: [0, 1000], locations: [], providers: [], rating: 0 });
         return { success: true, data: response.data };
       } else {
         const errorMessage = response.message || 'Failed to search services';
@@ -336,7 +336,7 @@ export const useServices = () => {
       setSearchError(null);
 
       const response = await servicesService.filterServices(filters);
-      
+
       if (response.success) {
         setFilteredServices(response.data);
         setSelectedFilters(filters);
@@ -364,7 +364,7 @@ export const useServices = () => {
       setSearchError(null);
 
       const response = await servicesService.getServicesByCategory(category);
-      
+
       if (response.success) {
         setFilteredServices(response.data);
         return { success: true, data: response.data };
@@ -391,7 +391,7 @@ export const useServices = () => {
       setSearchError(null);
 
       const response = await servicesService.getServicesByProvider(providerId);
-      
+
       if (response.success) {
         setFilteredServices(response.data);
         return { success: true, data: response.data };
@@ -426,7 +426,7 @@ export const useServices = () => {
       setCategoriesError(null);
 
       const response = await servicesService.getServiceCategories();
-      
+
       if (response.success) {
         setCategories(response.data);
         updateCacheTimestamp('categories');
@@ -454,7 +454,7 @@ export const useServices = () => {
       setError(null);
 
       const response = await servicesService.createServiceCategory(data);
-      
+
       if (response.success) {
         addCategory(response.data);
         toast.success('Category created successfully');
@@ -484,7 +484,7 @@ export const useServices = () => {
       setError(null);
 
       const response = await servicesService.updateServiceCategory(data);
-      
+
       if (response.success) {
         updateCategory(response.data);
         toast.success('Category updated successfully');
@@ -514,7 +514,7 @@ export const useServices = () => {
       setError(null);
 
       const response = await servicesService.deleteServiceCategory(id);
-      
+
       if (response.success) {
         removeCategory(id);
         toast.success('Category deleted successfully');
@@ -552,7 +552,7 @@ export const useServices = () => {
       setProvidersError(null);
 
       const response = await servicesService.getServiceProviders();
-      
+
       if (response.success) {
         setProviders(response.data);
         updateCacheTimestamp('providers');
@@ -580,7 +580,7 @@ export const useServices = () => {
       setError(null);
 
       const response = await servicesService.createServiceProvider(data);
-      
+
       if (response.success) {
         addProvider(response.data);
         toast.success('Provider created successfully');
@@ -610,7 +610,7 @@ export const useServices = () => {
       setError(null);
 
       const response = await servicesService.updateServiceProvider(data);
-      
+
       if (response.success) {
         updateProvider(response.data);
         toast.success('Provider updated successfully');
@@ -640,7 +640,7 @@ export const useServices = () => {
       setError(null);
 
       const response = await servicesService.deleteServiceProvider(id);
-      
+
       if (response.success) {
         removeProvider(id);
         toast.success('Provider deleted successfully');
@@ -670,7 +670,7 @@ export const useServices = () => {
       setSearchError(null);
 
       const response = await servicesService.getProviderServices(providerId);
-      
+
       if (response.success) {
         return { success: true, data: response.data };
       } else {
@@ -700,7 +700,7 @@ export const useServices = () => {
       setAvailabilityError(null);
 
       const response = await servicesService.getServiceAvailability(id, dateRange);
-      
+
       if (response.success) {
         return { success: true, data: response.data };
       } else {
@@ -726,7 +726,7 @@ export const useServices = () => {
       setError(null);
 
       const response = await servicesService.updateServiceAvailability(id, data);
-      
+
       if (response.success) {
         toast.success('Availability updated successfully');
         return { success: true, data: response.data };
@@ -755,7 +755,7 @@ export const useServices = () => {
       setAvailabilityError(null);
 
       const response = await servicesService.checkServiceAvailability(id, request);
-      
+
       if (response.success) {
         return { success: true, data: response.data };
       } else {
@@ -785,7 +785,7 @@ export const useServices = () => {
       setBookingsError(null);
 
       const response = await servicesService.createServiceBooking(serviceId, data);
-      
+
       if (response.success) {
         toast.success('Service booking created successfully');
         return { success: true, data: response.data };
@@ -814,7 +814,7 @@ export const useServices = () => {
       setBookingsError(null);
 
       const response = await servicesService.getServiceBookings(serviceId, page, limit);
-      
+
       if (response.success) {
         return { success: true, data: response.data };
       } else {
@@ -840,7 +840,7 @@ export const useServices = () => {
       setBookingsError(null);
 
       const response = await servicesService.cancelServiceBooking(serviceId, bookingId, reason);
-      
+
       if (response.success) {
         toast.success('Service booking cancelled successfully');
         return { success: true, data: response.data };
@@ -873,7 +873,7 @@ export const useServices = () => {
       setError(null);
 
       const response = await servicesService.uploadServiceImages(id, files);
-      
+
       if (response.success) {
         toast.success('Images uploaded successfully');
         // Refresh service data to get updated images
@@ -904,7 +904,7 @@ export const useServices = () => {
       setError(null);
 
       const response = await servicesService.deleteServiceImage(id, imageId);
-      
+
       if (response.success) {
         toast.success('Image deleted successfully');
         // Refresh service data to get updated images
@@ -939,7 +939,7 @@ export const useServices = () => {
       setReviewsError(null);
 
       const response = await servicesService.getServiceReviews(id, page, limit);
-      
+
       if (response.success) {
         return { success: true, data: response.data };
       } else {
@@ -965,7 +965,7 @@ export const useServices = () => {
       setError(null);
 
       const response = await servicesService.addServiceReview(id, review);
-      
+
       if (response.success) {
         toast.success('Review added successfully');
         return { success: true, data: response.data };
@@ -1002,7 +1002,7 @@ export const useServices = () => {
       setError(null);
 
       const response = await servicesService.getServiceStats();
-      
+
       if (response.success) {
         setServiceStats(response.data);
         updateCacheTimestamp('stats');
@@ -1031,7 +1031,7 @@ export const useServices = () => {
       }
 
       const response = await servicesService.getPopularServices(limit);
-      
+
       if (response.success) {
         setPopularServices(response.data);
         updateCacheTimestamp('popular');
@@ -1055,7 +1055,7 @@ export const useServices = () => {
       }
 
       const response = await servicesService.getFeaturedServices(limit);
-      
+
       if (response.success) {
         setFeaturedServices(response.data);
         updateCacheTimestamp('featured');
@@ -1082,7 +1082,7 @@ export const useServices = () => {
       setError(null);
 
       const response = await servicesService.bulkUpdateStatus(serviceIds, status);
-      
+
       if (response.success) {
         toast.success(`${response.data.updated} services updated successfully`);
         // Refresh services list
@@ -1113,7 +1113,7 @@ export const useServices = () => {
       setError(null);
 
       const response = await servicesService.bulkUpdatePricing(data);
-      
+
       if (response.success) {
         toast.success(`${response.data.updated} services pricing updated successfully`);
         // Refresh services list
@@ -1169,7 +1169,14 @@ export const useServices = () => {
    */
   const clearSearch = useCallback(() => {
     setSearchQuery('');
-    setSelectedFilters({});
+    setSelectedFilters({
+      categories: [],
+      types: [],
+      priceRange: [0, 1000],
+      locations: [],
+      providers: [],
+      rating: 0,
+    });
     setFilteredServices([]);
   }, [setSearchQuery, setSelectedFilters, setFilteredServices]);
 
@@ -1190,7 +1197,7 @@ export const useServices = () => {
     popularServices,
     featuredServices,
     serviceStats,
-    
+
     // Loading States
     isLoading,
     servicesLoading,
@@ -1200,7 +1207,7 @@ export const useServices = () => {
     availabilityLoading,
     bookingsLoading,
     reviewsLoading,
-    
+
     // Error States
     error,
     servicesError,
@@ -1210,11 +1217,11 @@ export const useServices = () => {
     availabilityError,
     bookingsError,
     reviewsError,
-    
+
     // Search & Filter State
     searchQuery,
     selectedFilters,
-    
+
     // Basic CRUD Actions
     getAllServices,
     getServiceById,
@@ -1223,54 +1230,54 @@ export const useServices = () => {
     updateServiceItem,
     deleteService,
     setSelectedService,
-    
+
     // Search and Filter Actions
     searchServices,
     filterServices,
     getServicesByCategory,
     getServicesByProvider,
     clearSearch,
-    
+
     // Category Actions
     getServiceCategories,
     createServiceCategory,
     updateServiceCategory,
     deleteServiceCategory,
-    
+
     // Provider Actions
     getServiceProviders,
     createServiceProvider,
     updateServiceProvider,
     deleteServiceProvider,
     getProviderServices,
-    
+
     // Availability Actions
     getServiceAvailability,
     updateServiceAvailability,
     checkServiceAvailability,
-    
+
     // Booking Actions
     createServiceBooking,
     getServiceBookings,
     cancelServiceBooking,
-    
+
     // Media Actions
     uploadServiceImages,
     deleteServiceImage,
-    
+
     // Review Actions
     getServiceReviews,
     addServiceReview,
-    
+
     // Statistics Actions
     getServiceStats,
     getPopularServices,
     getFeaturedServices,
-    
+
     // Bulk Actions
     bulkUpdateStatus,
     bulkUpdatePricing,
-    
+
     // Utility Actions
     initializeServicesData,
     clearAllErrors,

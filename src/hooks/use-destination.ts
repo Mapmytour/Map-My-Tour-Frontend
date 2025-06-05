@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect } from 'react';
 import { useDestinationStore } from '@/store/destination-store';
-import { 
+import {
   destinationService,
   CreateDestinationRequest,
   UpdateDestinationRequest,
@@ -35,7 +35,7 @@ export const useDestination = () => {
     climates,
     safetyLevels,
     destinationStats,
-    
+
     // Loading States
     isLoading,
     destinationsLoading,
@@ -43,7 +43,7 @@ export const useDestination = () => {
     toursLoading,
     activitiesLoading,
     statsLoading,
-    
+
     // Error States
     error,
     destinationsError,
@@ -51,11 +51,11 @@ export const useDestination = () => {
     toursError,
     activitiesError,
     statsError,
-    
+
     // Search & Filter State
     searchQuery,
     selectedFilters,
-    
+
     // Actions
     setDestinations,
     addDestination,
@@ -106,7 +106,7 @@ export const useDestination = () => {
       setDestinationsError(null);
 
       const response = await destinationService.getAllDestinations(filters);
-      
+
       if (response.success) {
         setDestinations(response.data.destinations);
         updateCacheTimestamp('destinations');
@@ -136,7 +136,7 @@ export const useDestination = () => {
       setError(null);
 
       const response = await destinationService.getDestinationById(id);
-      
+
       if (response.success) {
         setSelectedDestination(response.data);
         return { success: true, data: response.data };
@@ -165,7 +165,7 @@ export const useDestination = () => {
       setError(null);
 
       const response = await destinationService.getDestinationBySlug(slug);
-      
+
       if (response.success) {
         setSelectedDestination(response.data);
         return { success: true, data: response.data };
@@ -194,7 +194,7 @@ export const useDestination = () => {
       setError(null);
 
       const response = await destinationService.createDestination(data);
-      
+
       if (response.success) {
         addDestination(response.data);
         toast.success('Destination created successfully');
@@ -224,7 +224,7 @@ export const useDestination = () => {
       setError(null);
 
       const response = await destinationService.updateDestination(data);
-      
+
       if (response.success) {
         updateDestination(response.data);
         toast.success('Destination updated successfully');
@@ -254,7 +254,7 @@ export const useDestination = () => {
       setError(null);
 
       const response = await destinationService.deleteDestination(id);
-      
+
       if (response.success) {
         removeDestination(id);
         toast.success('Destination deleted successfully');
@@ -288,11 +288,11 @@ export const useDestination = () => {
       setSearchError(null);
 
       const response = await destinationService.searchDestinations(request);
-      
+
       if (response.success) {
         setFilteredDestinations(response.data.destinations);
         setSearchQuery(request.query);
-        setSelectedFilters(request.filters || {});
+        setSelectedFilters(request.filters || { countries: [], climates: [], safetyLevels: [] });
         return { success: true, data: response.data };
       } else {
         const errorMessage = response.message || 'Failed to search destinations';
@@ -319,7 +319,7 @@ export const useDestination = () => {
       setSearchError(null);
 
       const response = await destinationService.filterDestinations(filters);
-      
+
       if (response.success) {
         setFilteredDestinations(response.data);
         setSelectedFilters(filters);
@@ -347,7 +347,7 @@ export const useDestination = () => {
       setSearchError(null);
 
       const response = await destinationService.getDestinationsByCountry(country);
-      
+
       if (response.success) {
         setFilteredDestinations(response.data);
         return { success: true, data: response.data };
@@ -378,7 +378,7 @@ export const useDestination = () => {
       setError(null);
 
       const response = await destinationService.uploadDestinationImages(id, files);
-      
+
       if (response.success) {
         toast.success('Images uploaded successfully');
         // Refresh destination data to get updated images
@@ -409,7 +409,7 @@ export const useDestination = () => {
       setError(null);
 
       const response = await destinationService.deleteDestinationImage(id, imageId);
-      
+
       if (response.success) {
         toast.success('Image deleted successfully');
         // Refresh destination data to get updated images
@@ -440,7 +440,7 @@ export const useDestination = () => {
       setError(null);
 
       const response = await destinationService.setCoverImage(id, imageId);
-      
+
       if (response.success) {
         updateDestination(response.data);
         toast.success('Cover image updated successfully');
@@ -474,7 +474,7 @@ export const useDestination = () => {
       setToursError(null);
 
       const response = await destinationService.getDestinationTours(id, page, limit);
-      
+
       if (response.success) {
         return { success: true, data: response.data };
       } else {
@@ -500,7 +500,7 @@ export const useDestination = () => {
       setActivitiesError(null);
 
       const response = await destinationService.getDestinationActivities(id, page, limit);
-      
+
       if (response.success) {
         return { success: true, data: response.data };
       } else {
@@ -530,7 +530,7 @@ export const useDestination = () => {
       setStatsError(null);
 
       const response = await destinationService.getDestinationStats(id);
-      
+
       if (response.success) {
         return { success: true, data: response.data };
       } else {
@@ -556,7 +556,7 @@ export const useDestination = () => {
       setStatsError(null);
 
       const response = await destinationService.getSeasonalTrends(id);
-      
+
       if (response.success) {
         return { success: true, data: response.data };
       } else {
@@ -583,7 +583,7 @@ export const useDestination = () => {
       }
 
       const response = await destinationService.getPopularDestinations(limit);
-      
+
       if (response.success) {
         setPopularDestinations(response.data);
         updateCacheTimestamp('popular');
@@ -607,7 +607,7 @@ export const useDestination = () => {
       }
 
       const response = await destinationService.getFeaturedDestinations(limit);
-      
+
       if (response.success) {
         setFeaturedDestinations(response.data);
         updateCacheTimestamp('featured');
@@ -634,7 +634,7 @@ export const useDestination = () => {
       setError(null);
 
       const response = await destinationService.updateDestinationSEO(id, seoData);
-      
+
       if (response.success) {
         updateDestination(response.data);
         toast.success('SEO information updated successfully');
@@ -664,7 +664,7 @@ export const useDestination = () => {
       setError(null);
 
       const response = await destinationService.updateDestinationContent(id, contentData);
-      
+
       if (response.success) {
         updateDestination(response.data);
         toast.success('Content updated successfully');
@@ -698,7 +698,7 @@ export const useDestination = () => {
       setSearchError(null);
 
       const response = await destinationService.getNearbyDestinations(id, request);
-      
+
       if (response.success) {
         return { success: true, data: response.data };
       } else {
@@ -724,7 +724,7 @@ export const useDestination = () => {
       setSearchError(null);
 
       const response = await destinationService.searchByCoordinates(request);
-      
+
       if (response.success) {
         setFilteredDestinations(response.data.destinations);
         return { success: true, data: response.data };
@@ -756,7 +756,7 @@ export const useDestination = () => {
       }
 
       const response = await destinationService.getAllCountries();
-      
+
       if (response.success) {
         setCountries(response.data);
         updateCacheTimestamp('countries');
@@ -780,7 +780,7 @@ export const useDestination = () => {
       }
 
       const response = await destinationService.getAllRegions();
-      
+
       if (response.success) {
         setRegions(response.data);
         updateCacheTimestamp('regions');
@@ -804,7 +804,7 @@ export const useDestination = () => {
       }
 
       const response = await destinationService.getAllClimates();
-      
+
       if (response.success) {
         setClimates(response.data);
         updateCacheTimestamp('climates');
@@ -828,7 +828,7 @@ export const useDestination = () => {
       }
 
       const response = await destinationService.getAllSafetyLevels();
-      
+
       if (response.success) {
         setSafetyLevels(response.data);
         updateCacheTimestamp('safetyLevels');
@@ -855,7 +855,7 @@ export const useDestination = () => {
       setError(null);
 
       const response = await destinationService.bulkUpdateStatus(destinationIds, status);
-      
+
       if (response.success) {
         toast.success(`${response.data.updated} destinations updated successfully`);
         // Refresh destinations list
@@ -886,7 +886,7 @@ export const useDestination = () => {
       setError(null);
 
       const response = await destinationService.bulkUpdateFeatured(destinationIds, featured);
-      
+
       if (response.success) {
         toast.success(`${response.data.updated} destinations updated successfully`);
         // Refresh destinations list
@@ -951,7 +951,11 @@ export const useDestination = () => {
    */
   const clearSearch = useCallback(() => {
     setSearchQuery('');
-    setSelectedFilters({});
+    setSelectedFilters({
+      countries: [],
+      climates: [],
+      safetyLevels: []
+    });
     setFilteredDestinations([]);
   }, [setSearchQuery, setSelectedFilters, setFilteredDestinations]);
 
@@ -974,7 +978,7 @@ export const useDestination = () => {
     climates,
     safetyLevels,
     destinationStats,
-    
+
     // Loading States
     isLoading,
     destinationsLoading,
@@ -982,7 +986,7 @@ export const useDestination = () => {
     toursLoading,
     activitiesLoading,
     statsLoading,
-    
+
     // Error States
     error,
     destinationsError,
@@ -990,11 +994,11 @@ export const useDestination = () => {
     toursError,
     activitiesError,
     statsError,
-    
+
     // Search & Filter State
     searchQuery,
     selectedFilters,
-    
+
     // Basic CRUD Actions
     getAllDestinations,
     getDestinationById,
@@ -1003,46 +1007,46 @@ export const useDestination = () => {
     updateDestinationItem,
     deleteDestination,
     setSelectedDestination,
-    
+
     // Search and Filter Actions
     searchDestinations,
     filterDestinations,
     getDestinationsByCountry,
     clearSearch,
-    
+
     // Media Actions
     uploadDestinationImages,
     deleteDestinationImage,
     setCoverImage,
-    
+
     // Content Actions
     updateDestinationSEO,
     updateDestinationContent,
-    
+
     // Related Content Actions
     getDestinationTours,
     getDestinationActivities,
-    
+
     // Statistics Actions
     getDestinationStats,
     getSeasonalTrends,
     getPopularDestinations,
     getFeaturedDestinations,
-    
+
     // Geographic Actions
     getNearbyDestinations,
     searchByCoordinates,
-    
+
     // Metadata Actions
     getAllCountries,
     getAllRegions,
     getAllClimates,
     getAllSafetyLevels,
-    
+
     // Bulk Actions
     bulkUpdateStatus,
     bulkUpdateFeatured,
-    
+
     // Utility Actions
     initializeDestinationData,
     clearAllErrors,
