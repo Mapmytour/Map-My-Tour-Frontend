@@ -1,4 +1,3 @@
-import HistoryItem from '@/components/user/HistoryItem';
 
 export default function HistoryPage() {
   const history = [
@@ -9,11 +8,9 @@ export default function HistoryPage() {
   return (
     <div className="max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold mb-8">Travel History</h1>
-      
+
       <div className="space-y-6">
-        {history.map(item => (
-          <HistoryItem key={item.id} item={item} />
-        ))}
+        History Items
       </div>
     </div>
   );

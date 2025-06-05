@@ -1,4 +1,3 @@
-import ContactForm from '@/components/public/ContactForm';
 
 export default function ContactPage() {
   return (
@@ -59,7 +58,6 @@ export default function ContactPage() {
 
           {/* Contact Form */}
           <div>
-            <ContactForm />
           </div>
         </div>
       </div>

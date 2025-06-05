@@ -1,5 +1,3 @@
-import BookingCard from '@/components/user/BookingCard';
-import BookingFilters from '@/components/user/BookingFilters';
 
 export default function BookingsPage() {
   const bookings = [
@@ -11,13 +9,10 @@ export default function BookingsPage() {
     <div className="max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">My Bookings</h1>
-        <BookingFilters />
       </div>
-      
+
       <div className="space-y-6">
-        {bookings.map(booking => (
-          <BookingCard key={booking.id} booking={booking} />
-        ))}
+        Bookings
       </div>
     </div>
   );

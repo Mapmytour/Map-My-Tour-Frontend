@@ -15,23 +15,23 @@ import {
 } from 'lucide-react';
 
 // Types
-type SocialLink = {
+export type SocialLink = {
   icon: React.ComponentType<{ size?: number }>;
   url: string;
   name: string;
 };
 
-type QuickLink = {
+export type QuickLink = {
   title: string;
   url: string;
 };
 
-type ContactInfo = {
+export type ContactInfo = {
   icon: React.ComponentType<{ size?: number }>;
   text: string[];
 };
 
-type FooterProps = {
+export type FooterProps = {
   companyInfo: {
     name: string;
     logo: string;
@@ -105,12 +105,14 @@ const defaultFooterData: FooterProps = {
   }
 };
 
-const Footer: React.FC<FooterProps> = ({
-  companyInfo = defaultFooterData.companyInfo,
-  newsletter = defaultFooterData.newsletter,
-  instagramPosts = defaultFooterData.instagramPosts,
-  paymentMethods = defaultFooterData.paymentMethods
-}) => {
+const Footer: React.FC = () => {
+  const {
+    companyInfo,
+    newsletter,
+    instagramPosts,
+    paymentMethods
+  } = defaultFooterData;
+
   return (
     <footer className="bg-white/95">
       {/* Newsletter */}
@@ -160,7 +162,7 @@ const Footer: React.FC<FooterProps> = ({
             {companyInfo.description}
           </p>
           {/* Social Icons */}
-                    <div className="flex gap-3">
+          <div className="flex gap-3">
             {companyInfo.socialLinks.map((social, i) => (
               <motion.a
                 key={i}
@@ -182,7 +184,7 @@ const Footer: React.FC<FooterProps> = ({
           <h3 className="text-xl font-semibold mb-6 text-[var(--title-color)]">Quick Links</h3>
           <ul className="space-y-3 text-[var(--body-color)] text-sm">
             {companyInfo.quickLinks.map((link, i) => (
-              <motion.li 
+              <motion.li
                 key={i}
                 whileHover={{ x: 5 }}
                 transition={{ type: "spring", stiffness: 300 }}
@@ -206,7 +208,7 @@ const Footer: React.FC<FooterProps> = ({
           <h3 className="text-xl font-semibold mb-6 text-[var(--title-color)]">Get In Touch</h3>
           <ul className="space-y-5 text-sm text-[var(--body-color)]">
             {companyInfo.contactInfo.map((info, i) => (
-              <motion.li 
+              <motion.li
                 key={i}
                 className="flex gap-3 items-start"
                 whileHover={{ x: 5 }}

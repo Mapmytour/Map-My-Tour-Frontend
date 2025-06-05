@@ -1,4 +1,3 @@
-import DestinationCard from '@/components/public/DestinationCard';
 
 export default function DestinationsPage() {
   const destinations = [
@@ -12,11 +11,9 @@ export default function DestinationsPage() {
     <div className="min-h-screen py-8">
       <div className="max-w-6xl mx-auto px-4">
         <h1 className="text-3xl font-bold mb-8">Popular Destinations</h1>
-        
+
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {destinations.map(destination => (
-            <DestinationCard key={destination.id} destination={destination} />
-          ))}
+          Destinations to explore
         </div>
       </div>
     </div>
